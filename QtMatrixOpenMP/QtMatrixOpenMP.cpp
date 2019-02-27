@@ -29,10 +29,5 @@ void QtMatrixOpenMP::clickButton() {
 	Matrix *cc = MatrixCalculation::matrixMul(aa, bb);
 	ends = clock();
 	//std::cout << "now end the time of normal, the time is: " << ends - start << std::endl << std::endl;
-
-	int aaa = 1;
-	int bbb = 2;
-
-
 	ui.label->setText(QString::number(ends - start));
 }
