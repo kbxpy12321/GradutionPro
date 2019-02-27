@@ -92,7 +92,7 @@ Matrix *MatrixCalculation::expandMatrixWithZero(Matrix *outMatrix, int newRow, i
 	return resMatrix;
 }
 
-Matrix *MatrixCalculation::algorithmStrassen(Matrix *matrixA, Matrix *matrixB, int coreNum) {
+Matrix *MatrixCalculation::algorithmStrassen(Matrix *matrixA, Matrix *matrixB, int coreNum, int mulCode) {
 	if (matrixA->getCol() != matrixB->getRow())
 		return nullptr;
 	int row = matrixA->getRow();
@@ -120,7 +120,7 @@ Matrix *MatrixCalculation::algorithmStrassen(Matrix *matrixA, Matrix *matrixB, i
 	else if (row == col && col == sameSide) {
 		if (coreNum <= 1)
 			return Strassen(matrixA, matrixB);
-		return StrassenParallel(matrixA, matrixB, coreNum);
+		return StrassenParallel(matrixA, matrixB, coreNum, mulCode);
 	}
 
 
@@ -139,7 +139,7 @@ Matrix *MatrixCalculation::algorithmStrassen(Matrix *matrixA, Matrix *matrixB, i
 		tmpResMatrix = Strassen(tmpMatrixA, tmpMatrixB);
 	}
 	else {
-		tmpResMatrix = StrassenParallel(tmpMatrixA, tmpMatrixB, coreNum);
+		tmpResMatrix = StrassenParallel(tmpMatrixA, tmpMatrixB, coreNum, mulCode);
 	}
 
 	Matrix *resMatrix = tmpResMatrix->generateMatrixParts(1, 1, row, col);
@@ -152,7 +152,7 @@ Matrix *MatrixCalculation::algorithmStrassen(Matrix *matrixA, Matrix *matrixB, i
 }
 
 
-Matrix *MatrixCalculation::StrassenParallel(Matrix *matrixA, Matrix *matrixB, int coreNum) {
+Matrix *MatrixCalculation::StrassenParallel(Matrix *matrixA, Matrix *matrixB, int coreNum, int mulCode) {
 	int sideLen = matrixA->getRow();
 	int halfLen = sideLen / 2;
 	int matrixType = matrixTypeDecision(matrixA->getType(), matrixB->getType());
@@ -207,6 +207,7 @@ Matrix *MatrixCalculation::StrassenParallel(Matrix *matrixA, Matrix *matrixB, in
 
 
 	Matrix *M1, *M2, *M3, *M4, *M5, *M6, *M7;
+	int coreNumLeft = omp_get_num_threads() - coreNum;
 #pragma omp parallel
 	{
 #pragma omp sections nowait
@@ -214,37 +215,96 @@ Matrix *MatrixCalculation::StrassenParallel(Matrix *matrixA, Matrix *matrixB, in
 #pragma omp section
 			{
 				//printf("M1:%d", omp_get_thread_num());
-				M1 = Strassen(MatrixCalculation::matrixAdd(A11, A22), MatrixCalculation::matrixAdd(B11, B22));
+				if (mulCode == NORMALMATRIXMUL) {
+					M1 = matrixMul(MatrixCalculation::matrixAdd(A11, A22), MatrixCalculation::matrixAdd(B11, B22));
+				}
+				else if (mulCode == NORMALMATRIXMULPARALLEL) {
+					M1 = matrixMulParallel(MatrixCalculation::matrixAdd(A11, A22), MatrixCalculation::matrixAdd(B11, B22), coreNumLeft);
+				}
+				else{
+					M1 = Strassen(MatrixCalculation::matrixAdd(A11, A22), MatrixCalculation::matrixAdd(B11, B22));
+				}
+			
 			}
 #pragma omp section
 			{
 				//printf("M2:%d", omp_get_thread_num());
-				M2 = Strassen(MatrixCalculation::matrixAdd(A21, A22), B11);
+				if (mulCode == NORMALMATRIXMUL) {
+					M2 = matrixMul(MatrixCalculation::matrixAdd(A21, A22), B11);
+				}
+				else if (mulCode == NORMALMATRIXMULPARALLEL) {
+					M2 = matrixMulParallel(MatrixCalculation::matrixAdd(A21, A22), B11, coreNumLeft);
+				}
+				else {
+					M2 = Strassen(MatrixCalculation::matrixAdd(A21, A22), B11);
+				}
 			}
 #pragma omp section
 			{
 				//printf("M3:%d", omp_get_thread_num());
-				M3 = Strassen(A11, MatrixCalculation::matrixSub(B12, B22));
+				if (mulCode == NORMALMATRIXMUL) {
+					M3 = matrixMul(A11, MatrixCalculation::matrixSub(B12, B22));
+				}
+				else if (mulCode == NORMALMATRIXMULPARALLEL) {
+					M3 = matrixMulParallel(A11, MatrixCalculation::matrixSub(B12, B22), coreNumLeft);
+				}
+				else {
+					M3 = Strassen(A11, MatrixCalculation::matrixSub(B12, B22));
+				}
+				
 			}
 #pragma omp section
 			{
 				//printf("M4:%d", omp_get_thread_num());
-				M4 = Strassen(A22, MatrixCalculation::matrixSub(B21, B11));
+				if (mulCode == NORMALMATRIXMUL) {
+					M4 = matrixMul(A22, MatrixCalculation::matrixSub(B21, B11));
+				}
+				else if (mulCode == NORMALMATRIXMULPARALLEL) {
+					M4 = matrixMulParallel(A22, MatrixCalculation::matrixSub(B21, B11), coreNumLeft);
+				}
+				else {
+					M4 = Strassen(A22, MatrixCalculation::matrixSub(B21, B11));
+				}
 			}
 #pragma omp section
 			{
 				//printf("M5:%d", omp_get_thread_num());
-				M5 = Strassen(MatrixCalculation::matrixAdd(A11, A12), B22);
+				if (mulCode == NORMALMATRIXMUL) {
+					M5 = matrixMul(MatrixCalculation::matrixAdd(A11, A12), B22);
+				}
+				else if (mulCode == NORMALMATRIXMULPARALLEL) {
+					M5 = matrixMulParallel(MatrixCalculation::matrixAdd(A11, A12), B22, coreNumLeft);
+				}
+				else {
+					M5 = Strassen(MatrixCalculation::matrixAdd(A11, A12), B22);
+				}
 			}
 #pragma omp section
 			{
 				//printf("M6:%d", omp_get_thread_num());
-				M6 = Strassen(MatrixCalculation::matrixSub(A21, A11), MatrixCalculation::matrixAdd(B11, B12));
+				if (mulCode == NORMALMATRIXMUL) {
+					M6 = matrixMul(MatrixCalculation::matrixSub(A21, A11), MatrixCalculation::matrixAdd(B11, B12));
+				}
+				else if (mulCode == NORMALMATRIXMULPARALLEL) {
+					M6 = matrixMulParallel(MatrixCalculation::matrixSub(A21, A11), MatrixCalculation::matrixAdd(B11, B12), coreNumLeft);
+				}
+				else {
+					M6 = Strassen(MatrixCalculation::matrixSub(A21, A11), MatrixCalculation::matrixAdd(B11, B12));
+				}
 			}
 #pragma omp section
 			{
 				//printf("M7:%d", omp_get_thread_num());
-				M7 = Strassen(MatrixCalculation::matrixSub(A12, A22), MatrixCalculation::matrixAdd(B21, B22));
+				if (mulCode == NORMALMATRIXMUL) {
+					M7 = matrixMul(MatrixCalculation::matrixSub(A12, A22), MatrixCalculation::matrixAdd(B21, B22));
+				}
+				else if (mulCode == NORMALMATRIXMULPARALLEL) {
+					M7 = matrixMulParallel(MatrixCalculation::matrixSub(A12, A22), MatrixCalculation::matrixAdd(B21, B22), coreNumLeft);
+				}
+				else {
+					M7 = Strassen(MatrixCalculation::matrixSub(A12, A22), MatrixCalculation::matrixAdd(B21, B22));
+				}
+				
 			}
 		}
 	};
@@ -471,7 +531,7 @@ int ThreadDivision(int coreNum) {
 	return 5;
 }
 
-Matrix *MatrixCalculation::algorithmDNS(Matrix *matrixA, Matrix *matrixB, int coreNum) {
+Matrix *MatrixCalculation::algorithmDNS(Matrix *matrixA, Matrix *matrixB, int coreNum, int mulCore) {
 	if (matrixA->getCol() != matrixB->getRow())
 		return nullptr;
 
@@ -484,10 +544,10 @@ Matrix *MatrixCalculation::algorithmDNS(Matrix *matrixA, Matrix *matrixB, int co
 	int matrixBColModDivision = (threadLenDivision - matrixB->getCol() % threadLenDivision) % threadLenDivision;
 	int matrixABSameSideModDivision = (threadLenDivision - matrixA->getCol() % threadLenDivision) % threadLenDivision;
 	if (matrixARowModDivision == 0 && matrixBColModDivision == 0 && matrixABSameSideModDivision == 0)
-		return DNS(matrixA, matrixB, threadLenDivision);
+		return DNS(matrixA, matrixB, threadLenDivision, mulCore);
 	else if (matrixARowModDivision == 0 && matrixABSameSideModDivision == 0) {
 		Matrix *tmpMatrixB = expandMatrixWithZero(matrixB, matrixB->getRow() + matrixABSameSideModDivision, matrixB->getCol() + matrixBColModDivision);
-		Matrix *tmpResMatrix = DNS(matrixA, tmpMatrixB, threadLenDivision);
+		Matrix *tmpResMatrix = DNS(matrixA, tmpMatrixB, threadLenDivision, mulCore);
 		Matrix *resMatrix = tmpResMatrix->generateMatrixParts(1, 1, matrixA->getRow(), matrixB->getCol());
 		delete (tmpMatrixB);
 		delete (tmpResMatrix);
@@ -495,7 +555,7 @@ Matrix *MatrixCalculation::algorithmDNS(Matrix *matrixA, Matrix *matrixB, int co
 	}
 	else if (matrixBColModDivision == 0 && matrixABSameSideModDivision == 0) {
 		Matrix *tmpMatrixA = expandMatrixWithZero(matrixA, matrixA->getRow() + matrixARowModDivision, matrixA->getCol() + matrixABSameSideModDivision);
-		Matrix *tmpResMatrix = DNS(tmpMatrixA, matrixB, threadLenDivision);
+		Matrix *tmpResMatrix = DNS(tmpMatrixA, matrixB, threadLenDivision, mulCore);
 		Matrix *resMatrix = tmpResMatrix->generateMatrixParts(1, 1, matrixA->getRow(), matrixB->getCol());
 
 		delete (tmpMatrixA);
@@ -506,7 +566,7 @@ Matrix *MatrixCalculation::algorithmDNS(Matrix *matrixA, Matrix *matrixB, int co
 	else {
 		Matrix *tmpMatrixA = expandMatrixWithZero(matrixA, matrixA->getRow() + matrixARowModDivision, matrixA->getCol() + matrixABSameSideModDivision);
 		Matrix *tmpMatrixB = expandMatrixWithZero(matrixB, matrixB->getRow() + matrixABSameSideModDivision, matrixB->getCol() + matrixBColModDivision);
-		Matrix *tmpResMatrix = DNS(tmpMatrixA, tmpMatrixB, threadLenDivision);
+		Matrix *tmpResMatrix = DNS(tmpMatrixA, tmpMatrixB, threadLenDivision, mulCore);
 		Matrix *resMatrix = tmpResMatrix->generateMatrixParts(1, 1, matrixA->getRow(), matrixB->getCol());
 		delete (tmpMatrixA);
 		delete (tmpMatrixB);
@@ -515,7 +575,7 @@ Matrix *MatrixCalculation::algorithmDNS(Matrix *matrixA, Matrix *matrixB, int co
 	}
 }
 
-Matrix *MatrixCalculation::DNS(Matrix *matrixA, Matrix *matrixB, int threadLenDivision) {
+Matrix *MatrixCalculation::DNS(Matrix *matrixA, Matrix *matrixB, int threadLenDivision, int mulCode) {
 	int tid;
 	int tidI, tidJ, tidK;
 	int threadSquareDivision = threadLenDivision * threadLenDivision;
@@ -539,8 +599,15 @@ Matrix *MatrixCalculation::DNS(Matrix *matrixA, Matrix *matrixB, int threadLenDi
 		int blockIdA, blockIdB;
 		blockIdA = tidI + tidJ * threadLenDivision;
 		blockIdB = tidI * threadLenDivision + tidK;
-
-		matrixMulAndInsertByBlock(matrixA, matrixB, tmpResMatrix[tidI], blockIdA, blockIdB, threadLenDivision);
+		if (mulCode == NORMALMATRIXMUL) {
+			matrixMulAndInsertByBlock(matrixA, matrixB, tmpResMatrix[tidI], blockIdA, blockIdB, threadLenDivision, 1);
+		}
+		else if (mulCode == NORMALMATRIXMULPARALLEL) {
+			matrixMulAndInsertByBlock(matrixA, matrixB, tmpResMatrix[tidI], blockIdA, blockIdB, threadLenDivision, 99999);
+		}
+		else {
+			//TODO
+		}
 	}
 
 	int fullLen = resMatrix->getRow() * resMatrix->getCol();
@@ -559,7 +626,7 @@ Matrix *MatrixCalculation::DNS(Matrix *matrixA, Matrix *matrixB, int threadLenDi
 	return resMatrix;
 }
 
-Matrix *MatrixCalculation::algorithmCannon(Matrix *matrixA, Matrix *matrixB, int coreNum) {
+Matrix *MatrixCalculation::algorithmCannon(Matrix *matrixA, Matrix *matrixB, int coreNum, int mulCode) {
 	if (matrixA->getCol() != matrixB->getRow())
 		return nullptr;
 	int matrixSideDivision = CoreDivision(coreNum);
@@ -567,11 +634,11 @@ Matrix *MatrixCalculation::algorithmCannon(Matrix *matrixA, Matrix *matrixB, int
 	int matrixBColModDivision = (matrixSideDivision - matrixB->getCol() % matrixSideDivision) % matrixSideDivision;
 	int matrixABSameSideModDivision = (matrixSideDivision - matrixA->getCol() % matrixSideDivision) % matrixSideDivision;
 	if (matrixARowModDivision == 0 && matrixBColModDivision == 0 && matrixABSameSideModDivision == 0)
-		return Cannon(matrixA, matrixB, matrixSideDivision);
+		return Cannon(matrixA, matrixB, matrixSideDivision, mulCode);
 	else if (matrixARowModDivision == 0 && matrixABSameSideModDivision == 0) {
 		Matrix *tmpMatrixB = expandMatrixWithZero(matrixB, matrixB->getRow() + matrixABSameSideModDivision, matrixB->getCol() + matrixBColModDivision);
 
-		Matrix *tmpResMatrix = Cannon(matrixA, tmpMatrixB, matrixSideDivision);
+		Matrix *tmpResMatrix = Cannon(matrixA, tmpMatrixB, matrixSideDivision, mulCode);
 		Matrix *resMatrix = tmpResMatrix->generateMatrixParts(1, 1, matrixA->getRow(), matrixB->getCol());
 		delete (tmpMatrixB);
 		delete (tmpResMatrix);
@@ -579,7 +646,7 @@ Matrix *MatrixCalculation::algorithmCannon(Matrix *matrixA, Matrix *matrixB, int
 	}
 	else if (matrixBColModDivision == 0 && matrixABSameSideModDivision == 0) {
 		Matrix *tmpMatrixA = expandMatrixWithZero(matrixA, matrixA->getRow() + matrixARowModDivision, matrixA->getCol() + matrixABSameSideModDivision);
-		Matrix *tmpResMatrix = Cannon(tmpMatrixA, matrixB, matrixSideDivision);
+		Matrix *tmpResMatrix = Cannon(tmpMatrixA, matrixB, matrixSideDivision, mulCode);
 		Matrix *resMatrix = tmpResMatrix->generateMatrixParts(1, 1, matrixA->getRow(), matrixB->getCol());
 
 		delete (tmpMatrixA);
@@ -591,7 +658,7 @@ Matrix *MatrixCalculation::algorithmCannon(Matrix *matrixA, Matrix *matrixB, int
 		Matrix *tmpMatrixA = expandMatrixWithZero(matrixA, matrixA->getRow() + matrixARowModDivision, matrixA->getCol() + matrixABSameSideModDivision);
 		Matrix *tmpMatrixB = expandMatrixWithZero(matrixB, matrixB->getRow() + matrixABSameSideModDivision, matrixB->getCol() + matrixBColModDivision);
 
-		Matrix *tmpResMatrix = Cannon(tmpMatrixA, tmpMatrixB, matrixSideDivision);
+		Matrix *tmpResMatrix = Cannon(tmpMatrixA, tmpMatrixB, matrixSideDivision, mulCode);
 		Matrix *resMatrix = tmpResMatrix->generateMatrixParts(1, 1, matrixA->getRow(), matrixB->getCol());
 
 		delete (tmpMatrixA);
@@ -602,7 +669,7 @@ Matrix *MatrixCalculation::algorithmCannon(Matrix *matrixA, Matrix *matrixB, int
 	}
 }
 
-Matrix *MatrixCalculation::Cannon(Matrix *matrixA, Matrix *matrixB, int matrixSideDivision) {
+Matrix *MatrixCalculation::Cannon(Matrix *matrixA, Matrix *matrixB, int matrixSideDivision, int mulCode) {
 	omp_set_num_threads(matrixSideDivision * matrixSideDivision);
 	int tid;
 	auto *resMatrix = new Matrix(matrixA->getRow(), matrixB->getCol(), matrixTypeDecision(matrixA->getType(), matrixB->getType()));
@@ -622,7 +689,16 @@ Matrix *MatrixCalculation::Cannon(Matrix *matrixA, Matrix *matrixB, int matrixSi
 			tidB += matrixSideDivision * matrixSideDivision;
 
 		for (int i = 0; i < matrixSideDivision; i++) {
-			matrixMulAndInsertByBlock(matrixA, matrixB, resMatrix, tidA, tidB, matrixSideDivision);
+
+			if (mulCode == NORMALMATRIXMUL) {
+				matrixMulAndInsertByBlock(matrixA, matrixB, resMatrix, tidA, tidB, matrixSideDivision, 1);
+			}
+			else if (mulCode == NORMALMATRIXMULPARALLEL) {
+				matrixMulAndInsertByBlock(matrixA, matrixB, resMatrix, tidA, tidB, matrixSideDivision, 99999);
+			}
+			else {
+				//TODO
+			}
 			tidA--;
 			tidB -= matrixSideDivision;
 			if (tidA < rowA * matrixSideDivision)
@@ -637,7 +713,11 @@ Matrix *MatrixCalculation::Cannon(Matrix *matrixA, Matrix *matrixB, int matrixSi
 	return resMatrix;
 }
 
-Matrix *MatrixCalculation::matrixMulAndInsertByBlock(Matrix *matrixA, Matrix *matrixB, Matrix *matrixC, int blockIdA, int blockIdB, int sideDivision) {
+Matrix *MatrixCalculation::matrixMulAndInsertByBlock(Matrix *matrixA, Matrix *matrixB, Matrix *matrixC, int blockIdA, int blockIdB, int sideDivision, int coreNum) {
+	int allCores = omp_get_num_threads();
+	if (coreNum > allCores)
+		coreNum = allCores + 1;
+	omp_set_num_threads(coreNum);
 	int blockRowA = matrixA->getRow() / sideDivision;
 	int blockColA = matrixA->getCol() / sideDivision;
 	int blockRowB = matrixB->getRow() / sideDivision;
@@ -653,6 +733,7 @@ Matrix *MatrixCalculation::matrixMulAndInsertByBlock(Matrix *matrixA, Matrix *ma
 	double sumPerLine = 0;
 	int sameSideLen = matrixARightDownY - matrixALeftTopY + 1;
 	int startAY, startBX;
+#pragma omp parallel for if(coreNum > allCores) schedule(guided)
 	for (int i = matrixALeftTopX; i <= matrixARightDownX; i++) {
 		for (int k = matrixBLeftTopY; k <= matrixBRightDownY; k++) {
 			startAY = matrixALeftTopY;

@@ -7,6 +7,12 @@
 #define FLOAT 1
 #define DOUBLE 2
 #define LONGLONG 3
+#define NORMALMATRIXMUL 873
+#define NORMALMATRIXMULPARALLEL 389
+#define ALGOSTRASSEN 648
+#define ALGOSTRASSENPARALLEL 933
+#define ALGODNS 837
+#define ALGOCANNON 926
 
 
 #include <vector>

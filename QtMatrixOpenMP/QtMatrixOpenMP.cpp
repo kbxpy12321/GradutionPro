@@ -9,11 +9,11 @@ QtMatrixOpenMP::QtMatrixOpenMP(QWidget *parent)
 	connect(ui.testButton, SIGNAL(clicked()), this, SLOT(clickButton()));
 }
 
-#define MATRIXROWA 201
+#define MATRIXROWA 2047
 
-#define MATRIXSAME 173
+#define MATRIXSAME 2047
 
-#define MATRIXCOLB 168
+#define MATRIXCOLB 2047
 
 
 void QtMatrixOpenMP::clickButton() {
@@ -26,7 +26,7 @@ void QtMatrixOpenMP::clickButton() {
 	
 	start = clock();
 	//std::cout << "now start time of normal" << std::endl;
-	Matrix *cc = MatrixCalculation::matrixMul(aa, bb);
+	Matrix *cc = MatrixCalculation::algorithmStrassen(aa, bb, 0, 0);
 	ends = clock();
 	//std::cout << "now end the time of normal, the time is: " << ends - start << std::endl << std::endl;
 	ui.label->setText(QString::number(ends - start));
