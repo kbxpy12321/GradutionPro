@@ -204,10 +204,20 @@ Matrix *MatrixCalculation::StrassenParallel(Matrix *matrixA, Matrix *matrixB, in
 //    B22->printMatrix();
 //    std::cout<<std::endl;
 
-
+	Matrix *AddA11A22 = MatrixCalculation::matrixAdd(A11, A22);
+	Matrix *AddB11B22 = MatrixCalculation::matrixAdd(B11, B22);
+	Matrix *AddA21A22 = MatrixCalculation::matrixAdd(A21, A22);
+	Matrix *SubB12B22 = MatrixCalculation::matrixSub(B12, B22);
+	Matrix *SubB21B11 = MatrixCalculation::matrixSub(B21, B11);
+	Matrix *AddA11A12 = MatrixCalculation::matrixAdd(A11, A12);
+	Matrix *SubA21A11 = MatrixCalculation::matrixSub(A21, A11);
+	Matrix *AddB11B12 = MatrixCalculation::matrixAdd(B11, B12);
+	Matrix *SubA12A22 = MatrixCalculation::matrixSub(A12, A22);
+	Matrix *AddB21B22 = MatrixCalculation::matrixAdd(B21, B22);
 
 	Matrix *M1, *M2, *M3, *M4, *M5, *M6, *M7;
 	int coreNumLeft = omp_get_num_threads() - coreNum;
+
 #pragma omp parallel
 	{
 #pragma omp sections nowait
@@ -216,13 +226,13 @@ Matrix *MatrixCalculation::StrassenParallel(Matrix *matrixA, Matrix *matrixB, in
 			{
 				//printf("M1:%d", omp_get_thread_num());
 				if (mulCode == NORMALMATRIXMUL) {
-					M1 = matrixMul(MatrixCalculation::matrixAdd(A11, A22), MatrixCalculation::matrixAdd(B11, B22));
+					M1 = matrixMul(AddA11A22, AddB11B22);
 				}
 				else if (mulCode == NORMALMATRIXMULPARALLEL) {
-					M1 = matrixMulParallel(MatrixCalculation::matrixAdd(A11, A22), MatrixCalculation::matrixAdd(B11, B22), coreNumLeft);
+					M1 = matrixMulParallel(AddA11A22, AddB11B22, coreNumLeft);
 				}
 				else{
-					M1 = Strassen(MatrixCalculation::matrixAdd(A11, A22), MatrixCalculation::matrixAdd(B11, B22));
+					M1 = Strassen(AddA11A22, AddB11B22);
 				}
 			
 			}
@@ -230,26 +240,26 @@ Matrix *MatrixCalculation::StrassenParallel(Matrix *matrixA, Matrix *matrixB, in
 			{
 				//printf("M2:%d", omp_get_thread_num());
 				if (mulCode == NORMALMATRIXMUL) {
-					M2 = matrixMul(MatrixCalculation::matrixAdd(A21, A22), B11);
+					M2 = matrixMul(AddA21A22, B11);
 				}
 				else if (mulCode == NORMALMATRIXMULPARALLEL) {
-					M2 = matrixMulParallel(MatrixCalculation::matrixAdd(A21, A22), B11, coreNumLeft);
+					M2 = matrixMulParallel(AddA21A22, B11, coreNumLeft);
 				}
 				else {
-					M2 = Strassen(MatrixCalculation::matrixAdd(A21, A22), B11);
+					M2 = Strassen(AddA21A22, B11);
 				}
 			}
 #pragma omp section
 			{
 				//printf("M3:%d", omp_get_thread_num());
 				if (mulCode == NORMALMATRIXMUL) {
-					M3 = matrixMul(A11, MatrixCalculation::matrixSub(B12, B22));
+					M3 = matrixMul(A11, SubB12B22);
 				}
 				else if (mulCode == NORMALMATRIXMULPARALLEL) {
-					M3 = matrixMulParallel(A11, MatrixCalculation::matrixSub(B12, B22), coreNumLeft);
+					M3 = matrixMulParallel(A11, SubB12B22, coreNumLeft);
 				}
 				else {
-					M3 = Strassen(A11, MatrixCalculation::matrixSub(B12, B22));
+					M3 = Strassen(A11, SubB12B22);
 				}
 				
 			}
@@ -257,52 +267,52 @@ Matrix *MatrixCalculation::StrassenParallel(Matrix *matrixA, Matrix *matrixB, in
 			{
 				//printf("M4:%d", omp_get_thread_num());
 				if (mulCode == NORMALMATRIXMUL) {
-					M4 = matrixMul(A22, MatrixCalculation::matrixSub(B21, B11));
+					M4 = matrixMul(A22, SubB21B11);
 				}
 				else if (mulCode == NORMALMATRIXMULPARALLEL) {
-					M4 = matrixMulParallel(A22, MatrixCalculation::matrixSub(B21, B11), coreNumLeft);
+					M4 = matrixMulParallel(A22, SubB21B11, coreNumLeft);
 				}
 				else {
-					M4 = Strassen(A22, MatrixCalculation::matrixSub(B21, B11));
+					M4 = Strassen(A22, SubB21B11);
 				}
 			}
 #pragma omp section
 			{
 				//printf("M5:%d", omp_get_thread_num());
 				if (mulCode == NORMALMATRIXMUL) {
-					M5 = matrixMul(MatrixCalculation::matrixAdd(A11, A12), B22);
+					M5 = matrixMul(AddA11A12, B22);
 				}
 				else if (mulCode == NORMALMATRIXMULPARALLEL) {
-					M5 = matrixMulParallel(MatrixCalculation::matrixAdd(A11, A12), B22, coreNumLeft);
+					M5 = matrixMulParallel(AddA11A12, B22, coreNumLeft);
 				}
 				else {
-					M5 = Strassen(MatrixCalculation::matrixAdd(A11, A12), B22);
+					M5 = Strassen(AddA11A12, B22);
 				}
 			}
 #pragma omp section
 			{
 				//printf("M6:%d", omp_get_thread_num());
 				if (mulCode == NORMALMATRIXMUL) {
-					M6 = matrixMul(MatrixCalculation::matrixSub(A21, A11), MatrixCalculation::matrixAdd(B11, B12));
+					M6 = matrixMul(SubA21A11, AddB11B12);
 				}
 				else if (mulCode == NORMALMATRIXMULPARALLEL) {
-					M6 = matrixMulParallel(MatrixCalculation::matrixSub(A21, A11), MatrixCalculation::matrixAdd(B11, B12), coreNumLeft);
+					M6 = matrixMulParallel(SubA21A11, AddB11B12, coreNumLeft);
 				}
 				else {
-					M6 = Strassen(MatrixCalculation::matrixSub(A21, A11), MatrixCalculation::matrixAdd(B11, B12));
+					M6 = Strassen(SubA21A11, AddB11B12);
 				}
 			}
 #pragma omp section
 			{
 				//printf("M7:%d", omp_get_thread_num());
 				if (mulCode == NORMALMATRIXMUL) {
-					M7 = matrixMul(MatrixCalculation::matrixSub(A12, A22), MatrixCalculation::matrixAdd(B21, B22));
+					M7 = matrixMul(SubA12A22, AddB21B22);
 				}
 				else if (mulCode == NORMALMATRIXMULPARALLEL) {
-					M7 = matrixMulParallel(MatrixCalculation::matrixSub(A12, A22), MatrixCalculation::matrixAdd(B21, B22), coreNumLeft);
+					M7 = matrixMulParallel(SubA12A22, AddB21B22, coreNumLeft);
 				}
 				else {
-					M7 = Strassen(MatrixCalculation::matrixSub(A12, A22), MatrixCalculation::matrixAdd(B21, B22));
+					M7 = Strassen(SubA12A22, AddB21B22);
 				}
 				
 			}
@@ -372,6 +382,17 @@ Matrix *MatrixCalculation::StrassenParallel(Matrix *matrixA, Matrix *matrixB, in
 	//    delete(matrixA);
 	//    delete(matrixB);
 
+	delete(AddA11A22);
+	delete(AddB11B22);
+	delete(AddA21A22);
+	delete(SubB12B22);
+	delete(SubB21B11);
+	delete(AddA11A12);
+	delete(SubA21A11);
+	delete(AddB11B12);
+	delete(SubA12A22);
+	delete(AddB21B22);
+
 	return resultMatrix;
 }
 
@@ -423,15 +444,24 @@ Matrix* MatrixCalculation::Strassen(Matrix *matrixA, Matrix *matrixB) {
 	//    B22->printMatrix();
 	//    std::cout<<std::endl;
 
+	Matrix *AddA11A22 = MatrixCalculation::matrixAdd(A11, A22);
+	Matrix *AddB11B22 = MatrixCalculation::matrixAdd(B11, B22);
+	Matrix *AddA21A22 = MatrixCalculation::matrixAdd(A21, A22);
+	Matrix *SubB12B22 = MatrixCalculation::matrixSub(B12, B22);
+	Matrix *SubB21B11 = MatrixCalculation::matrixSub(B21, B11);
+	Matrix *AddA11A12 = MatrixCalculation::matrixAdd(A11, A12);
+	Matrix *SubA21A11 = MatrixCalculation::matrixSub(A21, A11);
+	Matrix *AddB11B12 = MatrixCalculation::matrixAdd(B11, B12);
+	Matrix *SubA12A22 = MatrixCalculation::matrixSub(A12, A22);
+	Matrix *AddB21B22 = MatrixCalculation::matrixAdd(B21, B22);
 
-
-	Matrix *M1 = Strassen(MatrixCalculation::matrixAdd(A11, A22), MatrixCalculation::matrixAdd(B11, B22));
-	Matrix *M2 = Strassen(MatrixCalculation::matrixAdd(A21, A22), B11);
-	Matrix *M3 = Strassen(A11, MatrixCalculation::matrixSub(B12, B22));
-	Matrix *M4 = Strassen(A22, MatrixCalculation::matrixSub(B21, B11));
-	Matrix *M5 = Strassen(MatrixCalculation::matrixAdd(A11, A12), B22);
-	Matrix *M6 = Strassen(MatrixCalculation::matrixSub(A21, A11), MatrixCalculation::matrixAdd(B11, B12));
-	Matrix *M7 = Strassen(MatrixCalculation::matrixSub(A12, A22), MatrixCalculation::matrixAdd(B21, B22));
+	Matrix *M1 = Strassen(AddA11A22, AddB11B22);
+	Matrix *M2 = Strassen(AddA21A22, B11);
+	Matrix *M3 = Strassen(A11, SubB12B22);
+	Matrix *M4 = Strassen(A22, SubB21B11);
+	Matrix *M5 = Strassen(AddA11A12, B22);
+	Matrix *M6 = Strassen(SubA21A11, AddB11B12);
+	Matrix *M7 = Strassen(SubA12A22, AddB21B22);
 
 	//    M1->printMatrix();
 	//    std::cout<<std::endl;
@@ -496,6 +526,17 @@ Matrix* MatrixCalculation::Strassen(Matrix *matrixA, Matrix *matrixB) {
 	delete(M7);
 	//    delete(matrixA);
 	//    delete(matrixB);
+
+	delete(AddA11A22);
+	delete(AddB11B22);
+	delete(AddA21A22);
+	delete(SubB12B22);
+	delete(SubB21B11);
+	delete(AddA11A12);
+	delete(SubA21A11);
+	delete(AddB11B12);
+	delete(SubA12A22);
+	delete(AddB21B22);   
 
 	return resultMatrix;
 }
@@ -605,8 +646,10 @@ Matrix *MatrixCalculation::DNS(Matrix *matrixA, Matrix *matrixB, int threadLenDi
 		else if (mulCode == NORMALMATRIXMULPARALLEL) {
 			matrixMulAndInsertByBlock(matrixA, matrixB, tmpResMatrix[tidI], blockIdA, blockIdB, threadLenDivision, 99999);
 		}
-		else {
-			//TODO
+		else {//TODO
+			//Matrix *matrixBlockA, *matrixBlockB;
+			//matrixBlockA = ;
+			//Matrix *tmpBlockResMatrix = algorithmStrassen(matrixBlockA, matrixBlockB, 0, 0);
 		}
 	}
 
