@@ -14,11 +14,11 @@
 #include "MatrixCalculation.h"
 #include <ctime>
 
-#define MATRIXROWA 2014
+#define MATRIXROWA 568
 
-#define MATRIXSAME 1733
+#define MATRIXSAME 572
 
-#define MATRIXCOLB 1685
+#define MATRIXCOLB 551
 
 #define MATRIXSIDE 1848
 
@@ -37,8 +37,15 @@ int main() {
 	ends = clock();
 	std::cout << "now end the time of normal, the time is: " << ends - start << std::endl << std::endl;
 
-
 	start = clock();
+	std::cout << "now start time of test" << std::endl;
+	Matrix *hh = MatrixCalculation::algorithmStrassen(aa, bb, 4, NORMALMATRIXMUL);
+	ends = clock();
+	std::cout << "the answer of test is: " << cc->matrixCompare(hh) << std::endl;
+	std::cout << "now end the time of test, the time is: " << ends - start << std::endl << std::endl;
+
+
+	/*start = clock();
 	std::cout << "now start time of DNS" << std::endl;
 	Matrix *hh = MatrixCalculation::algorithmDNS(aa, bb, 8, NORMALMATRIXMUL);
 	ends = clock();
@@ -76,7 +83,7 @@ int main() {
 	ends = clock();
 	std::cout << "the answer of Cannon is: " << cc->matrixCompare(ee) << std::endl;
 	std::cout << "now end the time of Cannon, the time is: " << ends - start << std::endl << std::endl;
-
+*/
 	system("pause");
 }
 
