@@ -153,6 +153,7 @@ Matrix *MatrixCalculation::algorithmStrassen(Matrix *matrixA, Matrix *matrixB, i
 
 
 Matrix *MatrixCalculation::StrassenParallel(Matrix *matrixA, Matrix *matrixB, int coreNum, int mulCode) {
+	omp_set_nested(1);
 	int sideLen = matrixA->getRow();
 	int halfLen = sideLen / 2;
 	int matrixType = matrixTypeDecision(matrixA->getType(), matrixB->getType());
@@ -220,7 +221,7 @@ Matrix *MatrixCalculation::StrassenParallel(Matrix *matrixA, Matrix *matrixB, in
 
 #pragma omp parallel
 	{
-#pragma omp sections nowait
+#pragma omp sections
 		{
 #pragma omp section
 			{
@@ -573,6 +574,7 @@ int ThreadDivision(int coreNum) {
 }
 
 Matrix *MatrixCalculation::algorithmDNS(Matrix *matrixA, Matrix *matrixB, int coreNum, int mulCore) {
+	omp_set_nested(1);
 	if (matrixA->getCol() != matrixB->getRow())
 		return nullptr;
 
@@ -640,16 +642,14 @@ Matrix *MatrixCalculation::DNS(Matrix *matrixA, Matrix *matrixB, int threadLenDi
 		int blockIdA, blockIdB;
 		blockIdA = tidI + tidJ * threadLenDivision;
 		blockIdB = tidI * threadLenDivision + tidK;
-		if (mulCode == NORMALMATRIXMUL) {
-			matrixMulAndInsertByBlock(matrixA, matrixB, tmpResMatrix[tidI], blockIdA, blockIdB, threadLenDivision, 1);
+		if (mulCode == ALGOSTRASSEN) {
+			matrixMulAndInsertByBlock(matrixA, matrixB, tmpResMatrix[tidI], blockIdA, blockIdB, threadLenDivision, ALGOSTRASSEN);
 		}
 		else if (mulCode == NORMALMATRIXMULPARALLEL) {
 			matrixMulAndInsertByBlock(matrixA, matrixB, tmpResMatrix[tidI], blockIdA, blockIdB, threadLenDivision, 99999);
 		}
-		else {//TODO
-			//Matrix *matrixBlockA, *matrixBlockB;
-			//matrixBlockA = ;
-			//Matrix *tmpBlockResMatrix = algorithmStrassen(matrixBlockA, matrixBlockB, 0, 0);
+		else {
+			matrixMulAndInsertByBlock(matrixA, matrixB, tmpResMatrix[tidI], blockIdA, blockIdB, threadLenDivision, 1);
 		}
 	}
 
@@ -670,6 +670,7 @@ Matrix *MatrixCalculation::DNS(Matrix *matrixA, Matrix *matrixB, int threadLenDi
 }
 
 Matrix *MatrixCalculation::algorithmCannon(Matrix *matrixA, Matrix *matrixB, int coreNum, int mulCode) {
+	omp_set_nested(1);
 	if (matrixA->getCol() != matrixB->getRow())
 		return nullptr;
 	int matrixSideDivision = CoreDivision(coreNum);
@@ -733,14 +734,15 @@ Matrix *MatrixCalculation::Cannon(Matrix *matrixA, Matrix *matrixB, int matrixSi
 
 		for (int i = 0; i < matrixSideDivision; i++) {
 
-			if (mulCode == NORMALMATRIXMUL) {
-				matrixMulAndInsertByBlock(matrixA, matrixB, resMatrix, tidA, tidB, matrixSideDivision, 1);
+			if (mulCode == ALGOSTRASSEN) {
+				matrixMulAndInsertByBlock(matrixA, matrixB, resMatrix, tidA, tidB, matrixSideDivision, ALGOSTRASSEN);
 			}
 			else if (mulCode == NORMALMATRIXMULPARALLEL) {
 				matrixMulAndInsertByBlock(matrixA, matrixB, resMatrix, tidA, tidB, matrixSideDivision, 99999);
 			}
 			else {
-				//TODO
+				matrixMulAndInsertByBlock(matrixA, matrixB, resMatrix, tidA, tidB, matrixSideDivision, 1);
+				
 			}
 			tidA--;
 			tidB -= matrixSideDivision;
@@ -758,9 +760,13 @@ Matrix *MatrixCalculation::Cannon(Matrix *matrixA, Matrix *matrixB, int matrixSi
 
 Matrix *MatrixCalculation::matrixMulAndInsertByBlock(Matrix *matrixA, Matrix *matrixB, Matrix *matrixC, int blockIdA, int blockIdB, int sideDivision, int coreNum) {
 	int allCores = omp_get_num_threads();
-	if (coreNum > allCores)
-		coreNum = allCores + 1;
-	omp_set_num_threads(coreNum);
+	if (coreNum > allCores) {
+		omp_set_num_threads(allCores + 1);
+	}
+	else
+	{
+		omp_set_num_threads(coreNum);
+	}
 	int blockRowA = matrixA->getRow() / sideDivision;
 	int blockColA = matrixA->getCol() / sideDivision;
 	int blockRowB = matrixB->getRow() / sideDivision;
@@ -776,18 +782,67 @@ Matrix *MatrixCalculation::matrixMulAndInsertByBlock(Matrix *matrixA, Matrix *ma
 	double sumPerLine = 0;
 	int sameSideLen = matrixARightDownY - matrixALeftTopY + 1;
 	int startAY, startBX;
-#pragma omp parallel for if(coreNum > allCores) schedule(guided)
-	for (int i = matrixALeftTopX; i <= matrixARightDownX; i++) {
-		for (int k = matrixBLeftTopY; k <= matrixBRightDownY; k++) {
-			startAY = matrixALeftTopY;
-			startBX = matrixBLeftTopX;
-			for (int j = 0; j < sameSideLen; j++) {
-				sumPerLine += matrixA->getMatrixElement(i, startAY) * matrixB->getMatrixElement(startBX, k);
-				startAY++;
-				startBX++;
+	if (coreNum < 2) {
+		for (int i = matrixALeftTopX; i <= matrixARightDownX; i++) {
+			for (int k = matrixBLeftTopY; k <= matrixBRightDownY; k++) {
+				startAY = matrixALeftTopY;
+				startBX = matrixBLeftTopX;
+				for (int j = 0; j < sameSideLen; j++) {
+					sumPerLine += matrixA->getMatrixElement(i, startAY) * matrixB->getMatrixElement(startBX, k);
+					startAY++;
+					startBX++;
+				}
+				matrixC->addIntoMatrixElement(i, k, sumPerLine);
+				sumPerLine = 0;
 			}
-			matrixC->addIntoMatrixElement(i, k, sumPerLine);
-			sumPerLine = 0;
+		}
+	}
+	else if (coreNum == ALGOSTRASSEN) {
+		Matrix *tmpMatrixA = new Matrix(matrixA->getRow(), matrixA->getCol(), matrixA->getType());
+		tmpMatrixA->initVectorSpace();
+		Matrix *tmpMatrixB = new Matrix(matrixB->getRow(), matrixB->getCol(), matrixB->getType());
+		tmpMatrixB->initVectorSpace();
+#pragma omp parallel for schedule(guided)
+		for (int i = matrixALeftTopX; i <= matrixARightDownX; i++) {
+			for (int k = matrixBLeftTopY; k <= matrixBRightDownY; k++) {
+				startAY = matrixALeftTopY;
+				startBX = matrixBLeftTopX;
+				for (int j = 0; j < sameSideLen; j++) {
+					tmpMatrixA->setMatrixElement(i - matrixALeftTopX + 1, startAY - matrixALeftTopY + 1, matrixA->getMatrixElement(i, startAY));
+					tmpMatrixB->setMatrixElement(startBX - matrixBLeftTopX + 1, k - matrixBLeftTopY + 1, matrixB->getMatrixElement(startBX, k));
+					//sumPerLine += matrixA->getMatrixElement(i, startAY) * matrixB->getMatrixElement(startBX, k);
+					startAY++;
+					startBX++;
+				}
+				//matrixC->addIntoMatrixElement(i, k, sumPerLine);
+				//sumPerLine = 0;
+			}
+		}
+		Matrix *tmpResMatrix = algorithmStrassen(tmpMatrixA, tmpMatrixB, 0, ALGOSTRASSEN);
+#pragma omp parallel for schedule(guided)
+		for (int i = matrixALeftTopX; i <= matrixARightDownX; i++) {
+			for (int k = matrixBLeftTopY; k <= matrixBRightDownY; k++) {
+				matrixC->setMatrixElement(i, k, tmpResMatrix->getMatrixElement(i + 1 - matrixALeftTopX, k + 1 - matrixBLeftTopY));
+			}
+		}
+		delete(tmpMatrixA);
+		delete(tmpMatrixB);
+		delete(tmpResMatrix);
+	}
+	else {
+#pragma omp parallel for schedule(guided)
+		for (int i = matrixALeftTopX; i <= matrixARightDownX; i++) {
+			for (int k = matrixBLeftTopY; k <= matrixBRightDownY; k++) {
+				startAY = matrixALeftTopY;
+				startBX = matrixBLeftTopX;
+				for (int j = 0; j < sameSideLen; j++) {
+					sumPerLine += matrixA->getMatrixElement(i, startAY) * matrixB->getMatrixElement(startBX, k);
+					startAY++;
+					startBX++;
+				}
+				matrixC->addIntoMatrixElement(i, k, sumPerLine);
+				sumPerLine = 0;
+			}
 		}
 	}
 	return nullptr;
