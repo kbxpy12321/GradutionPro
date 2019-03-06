@@ -11,7 +11,11 @@ public:
 	QtMatrixOpenMP(QWidget *parent = Q_NULLPTR);
 
 public slots:
-	void clickButton();
+	void clickPushButton_InsertQueque();
+	void clickPushButton_DeleteQueue();
+	//void clickPushButton_StartCalculation();
+	//void clickPushButton_ClearBox();
+	void clickPushButton_ConformMake();
 
 private:
 	Ui::QtMatrixOpenMPClass ui;

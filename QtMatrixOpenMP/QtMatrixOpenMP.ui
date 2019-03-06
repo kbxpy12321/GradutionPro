@@ -6,91 +6,379 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1308</width>
-    <height>811</height>
+    <width>1221</width>
+    <height>564</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>QtMatrixOpenMP</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="testButton">
+   <widget class="QWidget" name="gridLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>130</y>
-      <width>93</width>
-      <height>28</height>
+      <x>10</x>
+      <y>110</y>
+      <width>591</width>
+      <height>381</height>
      </rect>
     </property>
-    <property name="text">
-     <string>test</string>
-    </property>
+    <layout class="QGridLayout" name="gridLayout_algochoose">
+     <item row="2" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout_tableviewcalqin">
+       <item>
+        <widget class="QTableView" name="tableView_calqueue"/>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout_algochoose">
+       <item>
+        <widget class="QComboBox" name="comboBox_algoParallel">
+         <item>
+          <property name="text">
+           <string>无</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Stassen并行化算法</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Cannon并行算法</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>DNS并行算法</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_algoNormal">
+         <item>
+          <property name="text">
+           <string>朴素矩阵乘法</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>朴素并行乘法</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Strassen算法</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_corenum"/>
+       </item>
+      </layout>
+     </item>
+     <item row="3" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout_usetableview">
+       <item>
+        <widget class="QPushButton" name="pushButton_insertqueque">
+         <property name="text">
+          <string>插入计算队列</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_deleteque">
+         <property name="text">
+          <string>从计算队列删除</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_startcal">
+         <property name="text">
+          <string>开始计算</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_clear">
+         <property name="text">
+          <string>全部清空</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout_name_algochoose">
+       <item>
+        <widget class="QLabel" name="label_name_algoformer">
+         <property name="text">
+          <string>先行算法选择</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_name_algolatter">
+         <property name="text">
+          <string>后置算法选择</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_name_corenum">
+         <property name="text">
+          <string>cpu核心数</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QWidget" name="gridLayoutWidget_3">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>70</y>
-      <width>72</width>
-      <height>15</height>
+      <x>10</x>
+      <y>10</y>
+      <width>1191</width>
+      <height>93</height>
      </rect>
     </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
+    <layout class="QGridLayout" name="gridLayout_randommatrix">
+     <item row="1" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout_name_matrixpara">
+       <item>
+        <widget class="QLabel" name="label_name_ARow">
+         <property name="text">
+          <string>矩阵A行数</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_name_sameside">
+         <property name="text">
+          <string>相同边长</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_name_Bcol">
+         <property name="text">
+          <string>矩阵B列数</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_name_Atype">
+         <property name="text">
+          <string>矩阵A类型</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_name_Btype">
+         <property name="text">
+          <string>矩阵B类型</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_name_Amin">
+         <property name="text">
+          <string>矩阵A最小值</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_name_Amax">
+         <property name="text">
+          <string>矩阵A最大值</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_name_Bmin">
+         <property name="text">
+          <string>矩阵B最小值</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_name_Bmax">
+         <property name="text">
+          <string>矩阵B最大值</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_name_makematrix">
+         <property name="text">
+          <string>生成矩阵</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout_name_randommatrix">
+       <item>
+        <widget class="QLabel" name="label_name_matrixmaker">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Agency FB</family>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>随机矩阵生成器</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="2" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout_matrixpara">
+       <item>
+        <widget class="QSpinBox" name="spinBox_Arow">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>10000</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBox_sameside">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>10000</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBox_Bcol">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>10000</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_Atype">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+         <item>
+          <property name="text">
+           <string>Integer</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Float</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Double</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Long Long</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_Btype">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+         <item>
+          <property name="text">
+           <string>Integer</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Float</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Double</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Long Long</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="doubleSpinBox_Amin"/>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="doubleSpinBox_Amax"/>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="doubleSpinBox_Bmin"/>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="doubleSpinBox_Bmax"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_confirmmake">
+         <property name="text">
+          <string>确认生成</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>70</y>
-      <width>72</width>
-      <height>15</height>
+      <x>610</x>
+      <y>110</y>
+      <width>591</width>
+      <height>341</height>
      </rect>
     </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>70</y>
-      <width>72</width>
-      <height>15</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_4">
-    <property name="geometry">
-     <rect>
-      <x>510</x>
-      <y>70</y>
-      <width>72</width>
-      <height>15</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_5">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>130</y>
-      <width>72</width>
-      <height>15</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
+    <layout class="QGridLayout" name="gridLayout_rescal">
+     <item row="0" column="0">
+      <widget class="QTableView" name="tableView_showres"/>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -98,7 +386,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1308</width>
+     <width>1221</width>
      <height>26</height>
     </rect>
    </property>
