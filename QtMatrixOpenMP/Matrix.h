@@ -15,6 +15,7 @@
 #define ALGOSTRASSENPARALLEL 933
 #define ALGODNS 837
 #define ALGOCANNON 926
+#define NOALGO 742
 
 
 #include <vector>

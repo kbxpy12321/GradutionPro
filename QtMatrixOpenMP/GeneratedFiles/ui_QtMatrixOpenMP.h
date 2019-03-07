@@ -78,6 +78,10 @@ public:
     QWidget *gridLayoutWidget;
     QGridLayout *gridLayout_rescal;
     QTableView *tableView_showres;
+    QHBoxLayout *horizontalLayout_resbygraph;
+    QPushButton *pushButton_showcpucurve;
+    QPushButton *pushButton_showmemcurve;
+    QPushButton *pushButton;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -347,7 +351,7 @@ public:
 
         gridLayoutWidget = new QWidget(centralWidget);
         gridLayoutWidget->setObjectName(QString::fromUtf8("gridLayoutWidget"));
-        gridLayoutWidget->setGeometry(QRect(610, 110, 591, 341));
+        gridLayoutWidget->setGeometry(QRect(610, 110, 591, 381));
         gridLayout_rescal = new QGridLayout(gridLayoutWidget);
         gridLayout_rescal->setSpacing(6);
         gridLayout_rescal->setContentsMargins(11, 11, 11, 11);
@@ -357,6 +361,27 @@ public:
         tableView_showres->setObjectName(QString::fromUtf8("tableView_showres"));
 
         gridLayout_rescal->addWidget(tableView_showres, 0, 0, 1, 1);
+
+        horizontalLayout_resbygraph = new QHBoxLayout();
+        horizontalLayout_resbygraph->setSpacing(6);
+        horizontalLayout_resbygraph->setObjectName(QString::fromUtf8("horizontalLayout_resbygraph"));
+        pushButton_showcpucurve = new QPushButton(gridLayoutWidget);
+        pushButton_showcpucurve->setObjectName(QString::fromUtf8("pushButton_showcpucurve"));
+
+        horizontalLayout_resbygraph->addWidget(pushButton_showcpucurve);
+
+        pushButton_showmemcurve = new QPushButton(gridLayoutWidget);
+        pushButton_showmemcurve->setObjectName(QString::fromUtf8("pushButton_showmemcurve"));
+
+        horizontalLayout_resbygraph->addWidget(pushButton_showmemcurve);
+
+        pushButton = new QPushButton(gridLayoutWidget);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+
+        horizontalLayout_resbygraph->addWidget(pushButton);
+
+
+        gridLayout_rescal->addLayout(horizontalLayout_resbygraph, 1, 0, 1, 1);
 
         QtMatrixOpenMPClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(QtMatrixOpenMPClass);
@@ -416,6 +441,9 @@ public:
         comboBox_Btype->setItemText(3, QApplication::translate("QtMatrixOpenMPClass", "Long Long", nullptr));
 
         pushButton_confirmmake->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\241\256\350\256\244\347\224\237\346\210\220", nullptr));
+        pushButton_showcpucurve->setText(QApplication::translate("QtMatrixOpenMPClass", "\346\230\276\347\244\272\351\200\211\344\270\255\347\232\204cpu\345\215\240\347\224\250\346\233\262\347\272\277", nullptr));
+        pushButton_showmemcurve->setText(QApplication::translate("QtMatrixOpenMPClass", "\346\230\276\347\244\272\351\200\211\344\270\255\347\232\204\345\206\205\345\255\230\345\215\240\347\224\250\346\233\262\347\272\277", nullptr));
+        pushButton->setText(QApplication::translate("QtMatrixOpenMPClass", "\345\257\274\345\207\272\346\225\260\346\215\256", nullptr));
     } // retranslateUi
 
 };

@@ -13,10 +13,14 @@ public:
 public slots:
 	void clickPushButton_InsertQueque();
 	void clickPushButton_DeleteQueue();
-	//void clickPushButton_StartCalculation();
-	//void clickPushButton_ClearBox();
+	void clickPushButton_StartCalculation();
+	void clickPushButton_ClearBox();
 	void clickPushButton_ConformMake();
 
 private:
 	Ui::QtMatrixOpenMPClass ui;
+	void doAlgo(QString algoFormer, QString AlgoLatter, int coreNum);
+	void initButton();
+	void initTableView();
+	void initCombobox();
 };
