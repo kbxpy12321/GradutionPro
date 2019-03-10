@@ -13,12 +13,18 @@ QStandardItemModel *modelInTableViewCalQueue;
 QStandardItemModel *modelInTableViewShowRes;
 Matrix *matrixA, *matrixB;
 
+extern "C" {
+	int testInCuda();
+	Matrix *matrixMulByCuda(Matrix *matrixA, Matrix *matrixB);
+}
+
 void QtMatrixOpenMP::initButton() {
 	connect(ui.pushButton_insertqueque, SIGNAL(clicked()), this, SLOT(clickPushButton_InsertQueque()));
 	connect(ui.pushButton_deleteque, SIGNAL(clicked()), this, SLOT(clickPushButton_DeleteQueue()));
 	connect(ui.pushButton_confirmmake, SIGNAL(clicked()), this, SLOT(clickPushButton_ConformMake()));
 	connect(ui.pushButton_clear, SIGNAL(clicked()), this, SLOT(clickPushButton_ClearBox()));
 	connect(ui.pushButton_startcal, SIGNAL(clicked()), this, SLOT(clickPushButton_StartCalculation()));
+	connect(ui.pushButton_showcudares, SIGNAL(clicked()), this, SLOT(clickPushButton_ShowCudaRes()));
 }
 
 void QtMatrixOpenMP::initTableView() {
@@ -107,10 +113,31 @@ void QtMatrixOpenMP::clickPushButton_ConformMake() {
 	}
 }
 
+void QtMatrixOpenMP::clickPushButton_ShowCudaRes()
+{
+	ui.pushButton_showcudares->setText(QString::number(testInCuda()));
+}
+
 void QtMatrixOpenMP::clickPushButton_ClearBox() {
 	modelInTableViewCalQueue->removeRows(0, modelInTableViewCalQueue->rowCount());
 }
+void QtMatrixOpenMP::clickPushButton_StartCalculation() {
+	if (matrixA == NULL || matrixB == NULL) {
+		QMessageBox::warning(NULL, "", "No matrix!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+		return;
+	}
+	modelInTableViewShowRes->removeRows(0, modelInTableViewShowRes->rowCount());
+	int tmpRow = modelInTableViewCalQueue->rowCount();
+	int tmpCol = tableViewCalQueueCol;
+	for (int i = 0; i < tmpRow; i++) {
+		QString algoFormer = modelInTableViewCalQueue->data(modelInTableViewCalQueue->index(i, 0)).toString();
+		QString algoLatter = modelInTableViewCalQueue->data(modelInTableViewCalQueue->index(i, 1)).toString();
+		int coreNum = modelInTableViewCalQueue->data(modelInTableViewCalQueue->index(i, 2)).toInt();
+		doAlgo(algoFormer, algoLatter, coreNum);
+	}
+	//ui.pushButton_clear->setText(QString::number(modelInTableViewCalQueue->rowCount()));
 
+}
 int algoNameToCode(QString algo) {
 	if (algo == QString::fromLocal8Bit("нч")) {
 		return NOALGO;
@@ -169,20 +196,4 @@ void QtMatrixOpenMP::doAlgo(QString algoFormer, QString algoLatter, int coreNum)
 	itemIntoTableViewShowRes.append(new QStandardItem(QString::number(end - start)));
 	modelInTableViewShowRes->appendRow(itemIntoTableViewShowRes);
 }
-void QtMatrixOpenMP::clickPushButton_StartCalculation() {
-	if (matrixA == NULL || matrixB == NULL) {
-		QMessageBox::warning(NULL, "", "No matrix!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-		return;
-	}
-	modelInTableViewShowRes->removeRows(0, modelInTableViewShowRes->rowCount());
-	int tmpRow = modelInTableViewCalQueue->rowCount();
-	int tmpCol = tableViewCalQueueCol;
-	for (int i = 0; i < tmpRow; i++) {
-		QString algoFormer = modelInTableViewCalQueue->data(modelInTableViewCalQueue->index(i, 0)).toString();
-		QString algoLatter = modelInTableViewCalQueue->data(modelInTableViewCalQueue->index(i, 1)).toString();
-		int coreNum = modelInTableViewCalQueue->data(modelInTableViewCalQueue->index(i, 2)).toInt();
-		doAlgo(algoFormer, algoLatter, coreNum);
-	}
-	//ui.pushButton_clear->setText(QString::number(modelInTableViewCalQueue->rowCount()));
-	
-}
+

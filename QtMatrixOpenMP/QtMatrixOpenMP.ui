@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1221</width>
-    <height>564</height>
+    <height>607</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -395,9 +395,16 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="pushButton_coutdata">
          <property name="text">
           <string>导出数据</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_showcudares">
+         <property name="text">
+          <string>CudaMul</string>
          </property>
         </widget>
        </item>

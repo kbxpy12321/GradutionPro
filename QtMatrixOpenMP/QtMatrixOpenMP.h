@@ -16,6 +16,7 @@ public slots:
 	void clickPushButton_StartCalculation();
 	void clickPushButton_ClearBox();
 	void clickPushButton_ConformMake();
+	void clickPushButton_ShowCudaRes();
 
 private:
 	Ui::QtMatrixOpenMPClass ui;

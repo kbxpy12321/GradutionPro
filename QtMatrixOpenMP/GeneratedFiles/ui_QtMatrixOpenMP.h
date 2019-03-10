@@ -81,7 +81,8 @@ public:
     QHBoxLayout *horizontalLayout_resbygraph;
     QPushButton *pushButton_showcpucurve;
     QPushButton *pushButton_showmemcurve;
-    QPushButton *pushButton;
+    QPushButton *pushButton_coutdata;
+    QPushButton *pushButton_showcudares;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -90,7 +91,7 @@ public:
     {
         if (QtMatrixOpenMPClass->objectName().isEmpty())
             QtMatrixOpenMPClass->setObjectName(QString::fromUtf8("QtMatrixOpenMPClass"));
-        QtMatrixOpenMPClass->resize(1221, 564);
+        QtMatrixOpenMPClass->resize(1221, 607);
         centralWidget = new QWidget(QtMatrixOpenMPClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         gridLayoutWidget_2 = new QWidget(centralWidget);
@@ -375,10 +376,15 @@ public:
 
         horizontalLayout_resbygraph->addWidget(pushButton_showmemcurve);
 
-        pushButton = new QPushButton(gridLayoutWidget);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+        pushButton_coutdata = new QPushButton(gridLayoutWidget);
+        pushButton_coutdata->setObjectName(QString::fromUtf8("pushButton_coutdata"));
 
-        horizontalLayout_resbygraph->addWidget(pushButton);
+        horizontalLayout_resbygraph->addWidget(pushButton_coutdata);
+
+        pushButton_showcudares = new QPushButton(gridLayoutWidget);
+        pushButton_showcudares->setObjectName(QString::fromUtf8("pushButton_showcudares"));
+
+        horizontalLayout_resbygraph->addWidget(pushButton_showcudares);
 
 
         gridLayout_rescal->addLayout(horizontalLayout_resbygraph, 1, 0, 1, 1);
@@ -443,7 +449,8 @@ public:
         pushButton_confirmmake->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\241\256\350\256\244\347\224\237\346\210\220", nullptr));
         pushButton_showcpucurve->setText(QApplication::translate("QtMatrixOpenMPClass", "\346\230\276\347\244\272\351\200\211\344\270\255\347\232\204cpu\345\215\240\347\224\250\346\233\262\347\272\277", nullptr));
         pushButton_showmemcurve->setText(QApplication::translate("QtMatrixOpenMPClass", "\346\230\276\347\244\272\351\200\211\344\270\255\347\232\204\345\206\205\345\255\230\345\215\240\347\224\250\346\233\262\347\272\277", nullptr));
-        pushButton->setText(QApplication::translate("QtMatrixOpenMPClass", "\345\257\274\345\207\272\346\225\260\346\215\256", nullptr));
+        pushButton_coutdata->setText(QApplication::translate("QtMatrixOpenMPClass", "\345\257\274\345\207\272\346\225\260\346\215\256", nullptr));
+        pushButton_showcudares->setText(QApplication::translate("QtMatrixOpenMPClass", "CudaMul", nullptr));
     } // retranslateUi
 
 };
