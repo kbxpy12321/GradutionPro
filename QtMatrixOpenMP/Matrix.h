@@ -35,6 +35,7 @@ public:
 	void setRow(int row);
 	void setCol(int col);
 	int getType();
+	std::vector<int> returnVector();
 	void changeType(int matrixType);
 	void clearTypeMatrix();
 	double getMatrixElement(int x, int y);

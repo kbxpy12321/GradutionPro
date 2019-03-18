@@ -91,7 +91,7 @@ public:
     {
         if (QtMatrixOpenMPClass->objectName().isEmpty())
             QtMatrixOpenMPClass->setObjectName(QString::fromUtf8("QtMatrixOpenMPClass"));
-        QtMatrixOpenMPClass->resize(1221, 607);
+        QtMatrixOpenMPClass->resize(1221, 562);
         centralWidget = new QWidget(QtMatrixOpenMPClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         gridLayoutWidget_2 = new QWidget(centralWidget);
@@ -414,16 +414,16 @@ public:
         comboBox_algoParallel->setItemText(2, QApplication::translate("QtMatrixOpenMPClass", "Cannon\345\271\266\350\241\214\347\256\227\346\263\225", nullptr));
         comboBox_algoParallel->setItemText(3, QApplication::translate("QtMatrixOpenMPClass", "DNS\345\271\266\350\241\214\347\256\227\346\263\225", nullptr));
 
-        comboBox_algoNormal->setItemText(0, QApplication::translate("QtMatrixOpenMPClass", "\346\234\264\347\264\240\347\237\251\351\230\265\344\271\230\346\263\225", nullptr));
-        comboBox_algoNormal->setItemText(1, QApplication::translate("QtMatrixOpenMPClass", "\346\234\264\347\264\240\345\271\266\350\241\214\344\271\230\346\263\225", nullptr));
+        comboBox_algoNormal->setItemText(0, QApplication::translate("QtMatrixOpenMPClass", "\344\274\240\347\273\237\347\237\251\351\230\265\344\271\230\346\263\225", nullptr));
+        comboBox_algoNormal->setItemText(1, QApplication::translate("QtMatrixOpenMPClass", "\344\274\240\347\273\237\345\271\266\350\241\214\347\237\251\351\230\265\344\271\230\346\263\225", nullptr));
         comboBox_algoNormal->setItemText(2, QApplication::translate("QtMatrixOpenMPClass", "Strassen\347\256\227\346\263\225", nullptr));
 
         pushButton_insertqueque->setText(QApplication::translate("QtMatrixOpenMPClass", "\346\217\222\345\205\245\350\256\241\347\256\227\351\230\237\345\210\227", nullptr));
         pushButton_deleteque->setText(QApplication::translate("QtMatrixOpenMPClass", "\344\273\216\350\256\241\347\256\227\351\230\237\345\210\227\345\210\240\351\231\244", nullptr));
         pushButton_startcal->setText(QApplication::translate("QtMatrixOpenMPClass", "\345\274\200\345\247\213\350\256\241\347\256\227", nullptr));
         pushButton_clear->setText(QApplication::translate("QtMatrixOpenMPClass", "\345\205\250\351\203\250\346\270\205\347\251\272", nullptr));
-        label_name_algoformer->setText(QApplication::translate("QtMatrixOpenMPClass", "\345\205\210\350\241\214\347\256\227\346\263\225\351\200\211\346\213\251", nullptr));
-        label_name_algolatter->setText(QApplication::translate("QtMatrixOpenMPClass", "\345\220\216\347\275\256\347\256\227\346\263\225\351\200\211\346\213\251", nullptr));
+        label_name_algoformer->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265\345\210\222\345\210\206\347\256\227\346\263\225\351\200\211\346\213\251", nullptr));
+        label_name_algolatter->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265\347\233\270\344\271\230\347\256\227\346\263\225\351\200\211\346\213\251", nullptr));
         label_name_corenum->setText(QApplication::translate("QtMatrixOpenMPClass", "cpu\346\240\270\345\277\203\346\225\260", nullptr));
         label_name_ARow->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265A\350\241\214\346\225\260", nullptr));
         label_name_sameside->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\233\270\345\220\214\350\276\271\351\225\277", nullptr));

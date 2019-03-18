@@ -27,6 +27,10 @@ void Matrix::readMatrix() {
 
 }
 
+std::vector<int> Matrix::returnVector() {
+	return integerMatrix;
+}
+
 void Matrix::printMatrix() {
 	int row = getRow();
 	int col = getCol();

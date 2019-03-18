@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1221</width>
-    <height>607</height>
+    <height>900</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QWidget" name="gridLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>110</y>
+      <x>540</x>
+      <y>20</y>
       <width>591</width>
       <height>381</height>
      </rect>
@@ -61,12 +61,12 @@
         <widget class="QComboBox" name="comboBox_algoNormal">
          <item>
           <property name="text">
-           <string>朴素矩阵乘法</string>
+           <string>传统矩阵乘法</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>朴素并行乘法</string>
+           <string>传统并行矩阵乘法</string>
           </property>
          </item>
          <item>
@@ -118,14 +118,14 @@
        <item>
         <widget class="QLabel" name="label_name_algoformer">
          <property name="text">
-          <string>先行算法选择</string>
+          <string>矩阵划分算法选择</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="label_name_algolatter">
          <property name="text">
-          <string>后置算法选择</string>
+          <string>矩阵相乘算法选择</string>
          </property>
         </widget>
        </item>
@@ -140,136 +140,157 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="gridLayoutWidget_3">
+   <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>1191</width>
-      <height>93</height>
+      <x>540</x>
+      <y>420</y>
+      <width>591</width>
+      <height>381</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayout_randommatrix">
+    <layout class="QGridLayout" name="gridLayout_rescal">
      <item row="1" column="0">
-      <layout class="QHBoxLayout" name="horizontalLayout_name_matrixpara">
+      <layout class="QHBoxLayout" name="horizontalLayout_resbygraph">
        <item>
-        <widget class="QLabel" name="label_name_ARow">
+        <widget class="QPushButton" name="pushButton_coutdata">
          <property name="text">
-          <string>矩阵A行数</string>
+          <string>导出数据</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_name_sameside">
+        <widget class="QPushButton" name="pushButton_showcudares">
          <property name="text">
-          <string>相同边长</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_name_Bcol">
-         <property name="text">
-          <string>矩阵B列数</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_name_Atype">
-         <property name="text">
-          <string>矩阵A类型</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_name_Btype">
-         <property name="text">
-          <string>矩阵B类型</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_name_Amin">
-         <property name="text">
-          <string>矩阵A最小值</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_name_Amax">
-         <property name="text">
-          <string>矩阵A最大值</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_name_Bmin">
-         <property name="text">
-          <string>矩阵B最小值</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_name_Bmax">
-         <property name="text">
-          <string>矩阵B最大值</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_name_makematrix">
-         <property name="text">
-          <string>生成矩阵</string>
+          <string>CudaMul</string>
          </property>
         </widget>
        </item>
       </layout>
      </item>
      <item row="0" column="0">
-      <layout class="QHBoxLayout" name="horizontalLayout_name_randommatrix">
-       <item>
-        <widget class="QLabel" name="label_name_matrixmaker">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <family>Agency FB</family>
-           <pointsize>14</pointsize>
-          </font>
-         </property>
+      <widget class="QTableView" name="tableView_showres"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget_5">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>261</width>
+      <height>454</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_randommaker">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_name_matrixmaker">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <family>Agency FB</family>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>随机矩阵生成器</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="0">
+      <layout class="QGridLayout" name="gridLayout_makematrix">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_name_makematrix">
          <property name="text">
-          <string>随机矩阵生成器</string>
+          <string>生成矩阵</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="pushButton_confirmmake">
+         <property name="text">
+          <string>确认生成</string>
          </property>
         </widget>
        </item>
       </layout>
      </item>
-     <item row="2" column="0">
-      <layout class="QHBoxLayout" name="horizontalLayout_matrixpara">
-       <item>
-        <widget class="QSpinBox" name="spinBox_Arow">
-         <property name="minimum">
-          <number>1</number>
+     <item row="9" column="0">
+      <widget class="QLabel" name="label_blank4">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_blank2">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_blank3">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_blank1">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <layout class="QGridLayout" name="gridLayout_matrixbmake">
+       <item row="3" column="1">
+        <widget class="QDoubleSpinBox" name="doubleSpinBox_Bmax"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="comboBox_Btype">
+         <property name="editable">
+          <bool>true</bool>
          </property>
-         <property name="maximum">
-          <number>10000</number>
+         <item>
+          <property name="text">
+           <string>Integer</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Float</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Double</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Long Long</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QDoubleSpinBox" name="doubleSpinBox_Bmin"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_name_Bcol">
+         <property name="text">
+          <string>矩阵B列数</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QSpinBox" name="spinBox_sameside">
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>10000</number>
-         </property>
-        </widget>
-       </item>
-       <item>
+       <item row="1" column="0">
         <widget class="QSpinBox" name="spinBox_Bcol">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -285,7 +306,32 @@
          </property>
         </widget>
        </item>
-       <item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_name_Btype">
+         <property name="text">
+          <string>矩阵B类型</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLabel" name="label_name_Bmax">
+         <property name="text">
+          <string>矩阵B最大值</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_name_Bmin">
+         <property name="text">
+          <string>矩阵B最小值</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="2" column="0">
+      <layout class="QGridLayout" name="gridLayout_matrixamake">
+       <item row="1" column="1">
         <widget class="QComboBox" name="comboBox_Atype">
          <property name="enabled">
           <bool>true</bool>
@@ -315,49 +361,68 @@
          </item>
         </widget>
        </item>
-       <item>
-        <widget class="QComboBox" name="comboBox_Btype">
-         <property name="editable">
-          <bool>true</bool>
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_name_Atype">
+         <property name="text">
+          <string>矩阵A类型</string>
          </property>
-         <item>
-          <property name="text">
-           <string>Integer</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Float</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Double</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Long Long</string>
-          </property>
-         </item>
         </widget>
        </item>
-       <item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_name_Amin">
+         <property name="text">
+          <string>矩阵A最小值</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QSpinBox" name="spinBox_Arow">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>10000</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_name_ARow">
+         <property name="text">
+          <string>矩阵A行数</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLabel" name="label_name_Amax">
+         <property name="text">
+          <string>矩阵A最大值</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
         <widget class="QDoubleSpinBox" name="doubleSpinBox_Amin"/>
        </item>
-       <item>
+       <item row="3" column="1">
         <widget class="QDoubleSpinBox" name="doubleSpinBox_Amax"/>
        </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="doubleSpinBox_Bmin"/>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="doubleSpinBox_Bmax"/>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_confirmmake">
+      </layout>
+     </item>
+     <item row="4" column="0">
+      <layout class="QGridLayout" name="gridLayout_setsameside">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_name_sameside">
          <property name="text">
-          <string>确认生成</string>
+          <string>相同边长</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QSpinBox" name="spinBox_sameside">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>10000</number>
          </property>
         </widget>
        </item>
@@ -365,52 +430,31 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="gridLayoutWidget">
+   <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>610</x>
-      <y>110</y>
-      <width>591</width>
-      <height>381</height>
+      <x>480</x>
+      <y>390</y>
+      <width>259</width>
+      <height>15</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayout_rescal">
-     <item row="0" column="0">
-      <widget class="QTableView" name="tableView_showres"/>
-     </item>
-     <item row="1" column="0">
-      <layout class="QHBoxLayout" name="horizontalLayout_resbygraph">
-       <item>
-        <widget class="QPushButton" name="pushButton_showcpucurve">
-         <property name="text">
-          <string>显示选中的cpu占用曲线</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_showmemcurve">
-         <property name="text">
-          <string>显示选中的内存占用曲线</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_coutdata">
-         <property name="text">
-          <string>导出数据</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_showcudares">
-         <property name="text">
-          <string>CudaMul</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>400</y>
+      <width>259</width>
+      <height>15</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">

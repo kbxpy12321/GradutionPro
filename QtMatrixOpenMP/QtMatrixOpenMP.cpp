@@ -30,8 +30,8 @@ void QtMatrixOpenMP::initButton() {
 void QtMatrixOpenMP::initTableView() {
 	modelInTableViewCalQueue = new QStandardItemModel();
 	modelInTableViewCalQueue->setColumnCount(tableViewCalQueueCol);
-	modelInTableViewCalQueue->setHeaderData(0, Qt::Horizontal, QString::fromLocal8Bit("前置算法"));
-	modelInTableViewCalQueue->setHeaderData(1, Qt::Horizontal, QString::fromLocal8Bit("后置算法"));
+	modelInTableViewCalQueue->setHeaderData(0, Qt::Horizontal, QString::fromLocal8Bit("矩阵划分算法"));
+	modelInTableViewCalQueue->setHeaderData(1, Qt::Horizontal, QString::fromLocal8Bit("矩阵相乘算法"));
 	modelInTableViewCalQueue->setHeaderData(2, Qt::Horizontal, QString::fromLocal8Bit("核心数"));
 	ui.tableView_calqueue->setModel(modelInTableViewCalQueue);
 	ui.tableView_calqueue->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -40,8 +40,8 @@ void QtMatrixOpenMP::initTableView() {
 
 	modelInTableViewShowRes = new QStandardItemModel();
 	modelInTableViewShowRes->setColumnCount(tableViewShowRes);
-	modelInTableViewShowRes->setHeaderData(0, Qt::Horizontal, QString::fromLocal8Bit("前置算法"));
-	modelInTableViewShowRes->setHeaderData(1, Qt::Horizontal, QString::fromLocal8Bit("后置算法"));
+	modelInTableViewShowRes->setHeaderData(0, Qt::Horizontal, QString::fromLocal8Bit("矩阵划分算法"));
+	modelInTableViewShowRes->setHeaderData(1, Qt::Horizontal, QString::fromLocal8Bit("矩阵相乘算法"));
 	modelInTableViewShowRes->setHeaderData(2, Qt::Horizontal, QString::fromLocal8Bit("计算时间"));
 	ui.tableView_showres->setModel(modelInTableViewShowRes);
 	ui.tableView_showres->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -111,11 +111,6 @@ void QtMatrixOpenMP::clickPushButton_ConformMake() {
 	{
 		QMessageBox::warning(NULL, "", "failed", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 	}
-}
-
-void QtMatrixOpenMP::clickPushButton_ShowCudaRes()
-{
-	ui.pushButton_showcudares->setText(QString::number(testInCuda()));
 }
 
 void QtMatrixOpenMP::clickPushButton_ClearBox() {
@@ -193,6 +188,20 @@ void QtMatrixOpenMP::doAlgo(QString algoFormer, QString algoLatter, int coreNum)
 	QList<QStandardItem*> itemIntoTableViewShowRes;
 	itemIntoTableViewShowRes.append(new QStandardItem(algoFormer));
 	itemIntoTableViewShowRes.append(new QStandardItem(algoLatter));
+	itemIntoTableViewShowRes.append(new QStandardItem(QString::number(end - start)));
+	modelInTableViewShowRes->appendRow(itemIntoTableViewShowRes);
+}
+
+void QtMatrixOpenMP::clickPushButton_ShowCudaRes()
+{
+	clock_t start, end;
+	start = clock();
+	//ui.pushButton_showcudares->setText(QString::number(testInCuda()));
+	matrixMulByCuda(matrixA, matrixB);
+	end = clock();
+	QList<QStandardItem*> itemIntoTableViewShowRes;
+	itemIntoTableViewShowRes.append(new QStandardItem(QString::fromLocal8Bit("Cuda并行算法")));
+	itemIntoTableViewShowRes.append(new QStandardItem(QString::fromLocal8Bit("无")));
 	itemIntoTableViewShowRes.append(new QStandardItem(QString::number(end - start)));
 	modelInTableViewShowRes->appendRow(itemIntoTableViewShowRes);
 }
