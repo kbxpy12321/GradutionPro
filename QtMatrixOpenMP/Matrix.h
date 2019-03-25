@@ -34,8 +34,13 @@ public:
 	int getCol();
 	void setRow(int row);
 	void setCol(int col);
+	void setType(int type);
 	int getType();
-	std::vector<int> returnVector();
+	template <typename T>
+	T returnVector();
+
+	template <typename T>
+	void initVectorByArray(T *outArray, int row, int col, int type);
 	void changeType(int matrixType);
 	void clearTypeMatrix();
 	double getMatrixElement(int x, int y);

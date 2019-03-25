@@ -26,9 +26,40 @@ void Matrix::randomMatrix(int row, int col, int matrixType, int MIN, int MAX) {
 void Matrix::readMatrix() {
 
 }
-
-std::vector<int> Matrix::returnVector() {
+template <typename T>
+T Matrix::returnVector() {
+	if (this->getType() == INTEGER) {
+		return integerMatrix;
+	}
+	if (this->getType() == FLOAT) {
+		return floatMatrix;
+	}
+	if (this->getType() == DOUBLE) {
+		return doubleMatrix;
+	}
+	if (this->getType() == LONGLONG) {
+		return longMatrix;
+	}
 	return integerMatrix;
+}
+
+void Matrix::setType(int type) {
+	if (type != INTEGER || type != FLOAT || type != DOUBLE || type != LONGLONG) {
+		this->matrixType = INTEGER;
+		return;
+	}
+	this->matrixType = type;
+}
+template <typename T>
+void Matrix::initVectorByArray(T *outArray,int row, int col, int type) {
+	clearTypeMatrix();
+	this->setRow(row);
+	this->setCol(col);
+	this->setType(type);
+	int tmpLen = sideof(outArray) / sideof(T);
+	for (int i = 0; i < tmpLen; i++) {
+		this->matrixPush(outArray[i]);
+	}
 }
 
 void Matrix::printMatrix() {
@@ -114,7 +145,6 @@ double Matrix::getMatrixElement(int x, int y) {
 	return ERRORCODE;
 }
 
-
 double Matrix::getMatrixElement(int i) {
 	if (matrixType == INTEGER) {
 		return integerMatrix[i];
@@ -163,7 +193,6 @@ void Matrix::setMatrixElement(int i, double val) {
 		longMatrix[i] = (long long)val;
 	}
 }
-
 
 void Matrix::matrixAdd(Matrix *outMatrix) {
 	if (row != outMatrix->row || col != outMatrix->col) {
@@ -218,8 +247,6 @@ void Matrix::matrixSub(Matrix *outMatrix) {
 		}
 	}
 }
-
-
 
 Matrix *Matrix::generateMatrixParts(int leftTopRow, int leftTopCol, int rightDownRow, int rightDownCol) {
 	if (leftTopRow < 1 || leftTopCol < 1 || rightDownRow > getRow() || rightDownCol > getCol())
@@ -345,6 +372,4 @@ void Matrix::clearTypeMatrix() {
 	else {
 		return;
 	}
-	setRow(0);
-	setCol(0);
 }

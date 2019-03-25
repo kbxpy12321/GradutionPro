@@ -49,40 +49,43 @@ public:
     QLabel *label_name_algoformer;
     QLabel *label_name_algolatter;
     QLabel *label_name_corenum;
-    QWidget *gridLayoutWidget_3;
-    QGridLayout *gridLayout_randommatrix;
-    QHBoxLayout *horizontalLayout_name_matrixpara;
-    QLabel *label_name_ARow;
-    QLabel *label_name_sameside;
-    QLabel *label_name_Bcol;
-    QLabel *label_name_Atype;
-    QLabel *label_name_Btype;
-    QLabel *label_name_Amin;
-    QLabel *label_name_Amax;
-    QLabel *label_name_Bmin;
-    QLabel *label_name_Bmax;
-    QLabel *label_name_makematrix;
-    QHBoxLayout *horizontalLayout_name_randommatrix;
-    QLabel *label_name_matrixmaker;
-    QHBoxLayout *horizontalLayout_matrixpara;
-    QSpinBox *spinBox_Arow;
-    QSpinBox *spinBox_sameside;
-    QSpinBox *spinBox_Bcol;
-    QComboBox *comboBox_Atype;
-    QComboBox *comboBox_Btype;
-    QDoubleSpinBox *doubleSpinBox_Amin;
-    QDoubleSpinBox *doubleSpinBox_Amax;
-    QDoubleSpinBox *doubleSpinBox_Bmin;
-    QDoubleSpinBox *doubleSpinBox_Bmax;
-    QPushButton *pushButton_confirmmake;
     QWidget *gridLayoutWidget;
     QGridLayout *gridLayout_rescal;
-    QTableView *tableView_showres;
     QHBoxLayout *horizontalLayout_resbygraph;
-    QPushButton *pushButton_showcpucurve;
-    QPushButton *pushButton_showmemcurve;
     QPushButton *pushButton_coutdata;
     QPushButton *pushButton_showcudares;
+    QTableView *tableView_showres;
+    QWidget *gridLayoutWidget_5;
+    QGridLayout *gridLayout_randommaker;
+    QLabel *label_name_matrixmaker;
+    QGridLayout *gridLayout_makematrix;
+    QLabel *label_name_makematrix;
+    QPushButton *pushButton_confirmmake;
+    QLabel *label_blank4;
+    QLabel *label_blank2;
+    QLabel *label_blank3;
+    QLabel *label_blank1;
+    QGridLayout *gridLayout_matrixbmake;
+    QDoubleSpinBox *doubleSpinBox_Bmax;
+    QComboBox *comboBox_Btype;
+    QDoubleSpinBox *doubleSpinBox_Bmin;
+    QLabel *label_name_Bcol;
+    QSpinBox *spinBox_Bcol;
+    QLabel *label_name_Btype;
+    QLabel *label_name_Bmax;
+    QLabel *label_name_Bmin;
+    QGridLayout *gridLayout_matrixamake;
+    QComboBox *comboBox_Atype;
+    QLabel *label_name_Atype;
+    QLabel *label_name_Amin;
+    QSpinBox *spinBox_Arow;
+    QLabel *label_name_ARow;
+    QLabel *label_name_Amax;
+    QDoubleSpinBox *doubleSpinBox_Amin;
+    QDoubleSpinBox *doubleSpinBox_Amax;
+    QGridLayout *gridLayout_setsameside;
+    QLabel *label_name_sameside;
+    QSpinBox *spinBox_sameside;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -91,12 +94,12 @@ public:
     {
         if (QtMatrixOpenMPClass->objectName().isEmpty())
             QtMatrixOpenMPClass->setObjectName(QString::fromUtf8("QtMatrixOpenMPClass"));
-        QtMatrixOpenMPClass->resize(1221, 562);
+        QtMatrixOpenMPClass->resize(926, 871);
         centralWidget = new QWidget(QtMatrixOpenMPClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         gridLayoutWidget_2 = new QWidget(centralWidget);
         gridLayoutWidget_2->setObjectName(QString::fromUtf8("gridLayoutWidget_2"));
-        gridLayoutWidget_2->setGeometry(QRect(10, 110, 591, 381));
+        gridLayoutWidget_2->setGeometry(QRect(300, 20, 591, 381));
         gridLayout_algochoose = new QGridLayout(gridLayoutWidget_2);
         gridLayout_algochoose->setSpacing(6);
         gridLayout_algochoose->setContentsMargins(11, 11, 11, 11);
@@ -188,194 +191,17 @@ public:
 
         gridLayout_algochoose->addLayout(horizontalLayout_name_algochoose, 0, 1, 1, 1);
 
-        gridLayoutWidget_3 = new QWidget(centralWidget);
-        gridLayoutWidget_3->setObjectName(QString::fromUtf8("gridLayoutWidget_3"));
-        gridLayoutWidget_3->setGeometry(QRect(10, 10, 1191, 93));
-        gridLayout_randommatrix = new QGridLayout(gridLayoutWidget_3);
-        gridLayout_randommatrix->setSpacing(6);
-        gridLayout_randommatrix->setContentsMargins(11, 11, 11, 11);
-        gridLayout_randommatrix->setObjectName(QString::fromUtf8("gridLayout_randommatrix"));
-        gridLayout_randommatrix->setContentsMargins(0, 0, 0, 0);
-        horizontalLayout_name_matrixpara = new QHBoxLayout();
-        horizontalLayout_name_matrixpara->setSpacing(6);
-        horizontalLayout_name_matrixpara->setObjectName(QString::fromUtf8("horizontalLayout_name_matrixpara"));
-        label_name_ARow = new QLabel(gridLayoutWidget_3);
-        label_name_ARow->setObjectName(QString::fromUtf8("label_name_ARow"));
-
-        horizontalLayout_name_matrixpara->addWidget(label_name_ARow);
-
-        label_name_sameside = new QLabel(gridLayoutWidget_3);
-        label_name_sameside->setObjectName(QString::fromUtf8("label_name_sameside"));
-
-        horizontalLayout_name_matrixpara->addWidget(label_name_sameside);
-
-        label_name_Bcol = new QLabel(gridLayoutWidget_3);
-        label_name_Bcol->setObjectName(QString::fromUtf8("label_name_Bcol"));
-
-        horizontalLayout_name_matrixpara->addWidget(label_name_Bcol);
-
-        label_name_Atype = new QLabel(gridLayoutWidget_3);
-        label_name_Atype->setObjectName(QString::fromUtf8("label_name_Atype"));
-
-        horizontalLayout_name_matrixpara->addWidget(label_name_Atype);
-
-        label_name_Btype = new QLabel(gridLayoutWidget_3);
-        label_name_Btype->setObjectName(QString::fromUtf8("label_name_Btype"));
-
-        horizontalLayout_name_matrixpara->addWidget(label_name_Btype);
-
-        label_name_Amin = new QLabel(gridLayoutWidget_3);
-        label_name_Amin->setObjectName(QString::fromUtf8("label_name_Amin"));
-
-        horizontalLayout_name_matrixpara->addWidget(label_name_Amin);
-
-        label_name_Amax = new QLabel(gridLayoutWidget_3);
-        label_name_Amax->setObjectName(QString::fromUtf8("label_name_Amax"));
-
-        horizontalLayout_name_matrixpara->addWidget(label_name_Amax);
-
-        label_name_Bmin = new QLabel(gridLayoutWidget_3);
-        label_name_Bmin->setObjectName(QString::fromUtf8("label_name_Bmin"));
-
-        horizontalLayout_name_matrixpara->addWidget(label_name_Bmin);
-
-        label_name_Bmax = new QLabel(gridLayoutWidget_3);
-        label_name_Bmax->setObjectName(QString::fromUtf8("label_name_Bmax"));
-
-        horizontalLayout_name_matrixpara->addWidget(label_name_Bmax);
-
-        label_name_makematrix = new QLabel(gridLayoutWidget_3);
-        label_name_makematrix->setObjectName(QString::fromUtf8("label_name_makematrix"));
-
-        horizontalLayout_name_matrixpara->addWidget(label_name_makematrix);
-
-
-        gridLayout_randommatrix->addLayout(horizontalLayout_name_matrixpara, 1, 0, 1, 1);
-
-        horizontalLayout_name_randommatrix = new QHBoxLayout();
-        horizontalLayout_name_randommatrix->setSpacing(6);
-        horizontalLayout_name_randommatrix->setObjectName(QString::fromUtf8("horizontalLayout_name_randommatrix"));
-        label_name_matrixmaker = new QLabel(gridLayoutWidget_3);
-        label_name_matrixmaker->setObjectName(QString::fromUtf8("label_name_matrixmaker"));
-        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(label_name_matrixmaker->sizePolicy().hasHeightForWidth());
-        label_name_matrixmaker->setSizePolicy(sizePolicy);
-        QFont font;
-        font.setFamily(QString::fromUtf8("Agency FB"));
-        font.setPointSize(14);
-        label_name_matrixmaker->setFont(font);
-
-        horizontalLayout_name_randommatrix->addWidget(label_name_matrixmaker);
-
-
-        gridLayout_randommatrix->addLayout(horizontalLayout_name_randommatrix, 0, 0, 1, 1);
-
-        horizontalLayout_matrixpara = new QHBoxLayout();
-        horizontalLayout_matrixpara->setSpacing(6);
-        horizontalLayout_matrixpara->setObjectName(QString::fromUtf8("horizontalLayout_matrixpara"));
-        spinBox_Arow = new QSpinBox(gridLayoutWidget_3);
-        spinBox_Arow->setObjectName(QString::fromUtf8("spinBox_Arow"));
-        spinBox_Arow->setMinimum(1);
-        spinBox_Arow->setMaximum(10000);
-
-        horizontalLayout_matrixpara->addWidget(spinBox_Arow);
-
-        spinBox_sameside = new QSpinBox(gridLayoutWidget_3);
-        spinBox_sameside->setObjectName(QString::fromUtf8("spinBox_sameside"));
-        spinBox_sameside->setMinimum(1);
-        spinBox_sameside->setMaximum(10000);
-
-        horizontalLayout_matrixpara->addWidget(spinBox_sameside);
-
-        spinBox_Bcol = new QSpinBox(gridLayoutWidget_3);
-        spinBox_Bcol->setObjectName(QString::fromUtf8("spinBox_Bcol"));
-        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Fixed);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(spinBox_Bcol->sizePolicy().hasHeightForWidth());
-        spinBox_Bcol->setSizePolicy(sizePolicy1);
-        spinBox_Bcol->setMinimum(1);
-        spinBox_Bcol->setMaximum(10000);
-
-        horizontalLayout_matrixpara->addWidget(spinBox_Bcol);
-
-        comboBox_Atype = new QComboBox(gridLayoutWidget_3);
-        comboBox_Atype->addItem(QString());
-        comboBox_Atype->addItem(QString());
-        comboBox_Atype->addItem(QString());
-        comboBox_Atype->addItem(QString());
-        comboBox_Atype->setObjectName(QString::fromUtf8("comboBox_Atype"));
-        comboBox_Atype->setEnabled(true);
-        comboBox_Atype->setEditable(true);
-
-        horizontalLayout_matrixpara->addWidget(comboBox_Atype);
-
-        comboBox_Btype = new QComboBox(gridLayoutWidget_3);
-        comboBox_Btype->addItem(QString());
-        comboBox_Btype->addItem(QString());
-        comboBox_Btype->addItem(QString());
-        comboBox_Btype->addItem(QString());
-        comboBox_Btype->setObjectName(QString::fromUtf8("comboBox_Btype"));
-        comboBox_Btype->setEditable(true);
-
-        horizontalLayout_matrixpara->addWidget(comboBox_Btype);
-
-        doubleSpinBox_Amin = new QDoubleSpinBox(gridLayoutWidget_3);
-        doubleSpinBox_Amin->setObjectName(QString::fromUtf8("doubleSpinBox_Amin"));
-
-        horizontalLayout_matrixpara->addWidget(doubleSpinBox_Amin);
-
-        doubleSpinBox_Amax = new QDoubleSpinBox(gridLayoutWidget_3);
-        doubleSpinBox_Amax->setObjectName(QString::fromUtf8("doubleSpinBox_Amax"));
-
-        horizontalLayout_matrixpara->addWidget(doubleSpinBox_Amax);
-
-        doubleSpinBox_Bmin = new QDoubleSpinBox(gridLayoutWidget_3);
-        doubleSpinBox_Bmin->setObjectName(QString::fromUtf8("doubleSpinBox_Bmin"));
-
-        horizontalLayout_matrixpara->addWidget(doubleSpinBox_Bmin);
-
-        doubleSpinBox_Bmax = new QDoubleSpinBox(gridLayoutWidget_3);
-        doubleSpinBox_Bmax->setObjectName(QString::fromUtf8("doubleSpinBox_Bmax"));
-
-        horizontalLayout_matrixpara->addWidget(doubleSpinBox_Bmax);
-
-        pushButton_confirmmake = new QPushButton(gridLayoutWidget_3);
-        pushButton_confirmmake->setObjectName(QString::fromUtf8("pushButton_confirmmake"));
-
-        horizontalLayout_matrixpara->addWidget(pushButton_confirmmake);
-
-
-        gridLayout_randommatrix->addLayout(horizontalLayout_matrixpara, 2, 0, 1, 1);
-
         gridLayoutWidget = new QWidget(centralWidget);
         gridLayoutWidget->setObjectName(QString::fromUtf8("gridLayoutWidget"));
-        gridLayoutWidget->setGeometry(QRect(610, 110, 591, 381));
+        gridLayoutWidget->setGeometry(QRect(300, 420, 591, 381));
         gridLayout_rescal = new QGridLayout(gridLayoutWidget);
         gridLayout_rescal->setSpacing(6);
         gridLayout_rescal->setContentsMargins(11, 11, 11, 11);
         gridLayout_rescal->setObjectName(QString::fromUtf8("gridLayout_rescal"));
         gridLayout_rescal->setContentsMargins(0, 0, 0, 0);
-        tableView_showres = new QTableView(gridLayoutWidget);
-        tableView_showres->setObjectName(QString::fromUtf8("tableView_showres"));
-
-        gridLayout_rescal->addWidget(tableView_showres, 0, 0, 1, 1);
-
         horizontalLayout_resbygraph = new QHBoxLayout();
         horizontalLayout_resbygraph->setSpacing(6);
         horizontalLayout_resbygraph->setObjectName(QString::fromUtf8("horizontalLayout_resbygraph"));
-        pushButton_showcpucurve = new QPushButton(gridLayoutWidget);
-        pushButton_showcpucurve->setObjectName(QString::fromUtf8("pushButton_showcpucurve"));
-
-        horizontalLayout_resbygraph->addWidget(pushButton_showcpucurve);
-
-        pushButton_showmemcurve = new QPushButton(gridLayoutWidget);
-        pushButton_showmemcurve->setObjectName(QString::fromUtf8("pushButton_showmemcurve"));
-
-        horizontalLayout_resbygraph->addWidget(pushButton_showmemcurve);
-
         pushButton_coutdata = new QPushButton(gridLayoutWidget);
         pushButton_coutdata->setObjectName(QString::fromUtf8("pushButton_coutdata"));
 
@@ -389,10 +215,203 @@ public:
 
         gridLayout_rescal->addLayout(horizontalLayout_resbygraph, 1, 0, 1, 1);
 
+        tableView_showres = new QTableView(gridLayoutWidget);
+        tableView_showres->setObjectName(QString::fromUtf8("tableView_showres"));
+
+        gridLayout_rescal->addWidget(tableView_showres, 0, 0, 1, 1);
+
+        gridLayoutWidget_5 = new QWidget(centralWidget);
+        gridLayoutWidget_5->setObjectName(QString::fromUtf8("gridLayoutWidget_5"));
+        gridLayoutWidget_5->setGeometry(QRect(10, 30, 261, 681));
+        gridLayout_randommaker = new QGridLayout(gridLayoutWidget_5);
+        gridLayout_randommaker->setSpacing(6);
+        gridLayout_randommaker->setContentsMargins(11, 11, 11, 11);
+        gridLayout_randommaker->setObjectName(QString::fromUtf8("gridLayout_randommaker"));
+        gridLayout_randommaker->setContentsMargins(0, 0, 0, 0);
+        label_name_matrixmaker = new QLabel(gridLayoutWidget_5);
+        label_name_matrixmaker->setObjectName(QString::fromUtf8("label_name_matrixmaker"));
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(label_name_matrixmaker->sizePolicy().hasHeightForWidth());
+        label_name_matrixmaker->setSizePolicy(sizePolicy);
+        QFont font;
+        font.setFamily(QString::fromUtf8("Agency FB"));
+        font.setPointSize(14);
+        label_name_matrixmaker->setFont(font);
+
+        gridLayout_randommaker->addWidget(label_name_matrixmaker, 0, 0, 1, 1);
+
+        gridLayout_makematrix = new QGridLayout();
+        gridLayout_makematrix->setSpacing(6);
+        gridLayout_makematrix->setObjectName(QString::fromUtf8("gridLayout_makematrix"));
+        label_name_makematrix = new QLabel(gridLayoutWidget_5);
+        label_name_makematrix->setObjectName(QString::fromUtf8("label_name_makematrix"));
+
+        gridLayout_makematrix->addWidget(label_name_makematrix, 0, 0, 1, 1);
+
+        pushButton_confirmmake = new QPushButton(gridLayoutWidget_5);
+        pushButton_confirmmake->setObjectName(QString::fromUtf8("pushButton_confirmmake"));
+
+        gridLayout_makematrix->addWidget(pushButton_confirmmake, 1, 0, 1, 1);
+
+
+        gridLayout_randommaker->addLayout(gridLayout_makematrix, 10, 0, 1, 1);
+
+        label_blank4 = new QLabel(gridLayoutWidget_5);
+        label_blank4->setObjectName(QString::fromUtf8("label_blank4"));
+
+        gridLayout_randommaker->addWidget(label_blank4, 9, 0, 1, 1);
+
+        label_blank2 = new QLabel(gridLayoutWidget_5);
+        label_blank2->setObjectName(QString::fromUtf8("label_blank2"));
+
+        gridLayout_randommaker->addWidget(label_blank2, 3, 0, 1, 1);
+
+        label_blank3 = new QLabel(gridLayoutWidget_5);
+        label_blank3->setObjectName(QString::fromUtf8("label_blank3"));
+
+        gridLayout_randommaker->addWidget(label_blank3, 7, 0, 1, 1);
+
+        label_blank1 = new QLabel(gridLayoutWidget_5);
+        label_blank1->setObjectName(QString::fromUtf8("label_blank1"));
+
+        gridLayout_randommaker->addWidget(label_blank1, 1, 0, 1, 1);
+
+        gridLayout_matrixbmake = new QGridLayout();
+        gridLayout_matrixbmake->setSpacing(6);
+        gridLayout_matrixbmake->setObjectName(QString::fromUtf8("gridLayout_matrixbmake"));
+        doubleSpinBox_Bmax = new QDoubleSpinBox(gridLayoutWidget_5);
+        doubleSpinBox_Bmax->setObjectName(QString::fromUtf8("doubleSpinBox_Bmax"));
+
+        gridLayout_matrixbmake->addWidget(doubleSpinBox_Bmax, 3, 1, 1, 1);
+
+        comboBox_Btype = new QComboBox(gridLayoutWidget_5);
+        comboBox_Btype->addItem(QString());
+        comboBox_Btype->addItem(QString());
+        comboBox_Btype->addItem(QString());
+        comboBox_Btype->addItem(QString());
+        comboBox_Btype->setObjectName(QString::fromUtf8("comboBox_Btype"));
+        comboBox_Btype->setEditable(true);
+
+        gridLayout_matrixbmake->addWidget(comboBox_Btype, 1, 1, 1, 1);
+
+        doubleSpinBox_Bmin = new QDoubleSpinBox(gridLayoutWidget_5);
+        doubleSpinBox_Bmin->setObjectName(QString::fromUtf8("doubleSpinBox_Bmin"));
+
+        gridLayout_matrixbmake->addWidget(doubleSpinBox_Bmin, 3, 0, 1, 1);
+
+        label_name_Bcol = new QLabel(gridLayoutWidget_5);
+        label_name_Bcol->setObjectName(QString::fromUtf8("label_name_Bcol"));
+
+        gridLayout_matrixbmake->addWidget(label_name_Bcol, 0, 0, 1, 1);
+
+        spinBox_Bcol = new QSpinBox(gridLayoutWidget_5);
+        spinBox_Bcol->setObjectName(QString::fromUtf8("spinBox_Bcol"));
+        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(spinBox_Bcol->sizePolicy().hasHeightForWidth());
+        spinBox_Bcol->setSizePolicy(sizePolicy1);
+        spinBox_Bcol->setMinimum(1);
+        spinBox_Bcol->setMaximum(10000);
+
+        gridLayout_matrixbmake->addWidget(spinBox_Bcol, 1, 0, 1, 1);
+
+        label_name_Btype = new QLabel(gridLayoutWidget_5);
+        label_name_Btype->setObjectName(QString::fromUtf8("label_name_Btype"));
+
+        gridLayout_matrixbmake->addWidget(label_name_Btype, 0, 1, 1, 1);
+
+        label_name_Bmax = new QLabel(gridLayoutWidget_5);
+        label_name_Bmax->setObjectName(QString::fromUtf8("label_name_Bmax"));
+
+        gridLayout_matrixbmake->addWidget(label_name_Bmax, 2, 1, 1, 1);
+
+        label_name_Bmin = new QLabel(gridLayoutWidget_5);
+        label_name_Bmin->setObjectName(QString::fromUtf8("label_name_Bmin"));
+
+        gridLayout_matrixbmake->addWidget(label_name_Bmin, 2, 0, 1, 1);
+
+
+        gridLayout_randommaker->addLayout(gridLayout_matrixbmake, 8, 0, 1, 1);
+
+        gridLayout_matrixamake = new QGridLayout();
+        gridLayout_matrixamake->setSpacing(6);
+        gridLayout_matrixamake->setObjectName(QString::fromUtf8("gridLayout_matrixamake"));
+        comboBox_Atype = new QComboBox(gridLayoutWidget_5);
+        comboBox_Atype->addItem(QString());
+        comboBox_Atype->addItem(QString());
+        comboBox_Atype->addItem(QString());
+        comboBox_Atype->addItem(QString());
+        comboBox_Atype->setObjectName(QString::fromUtf8("comboBox_Atype"));
+        comboBox_Atype->setEnabled(true);
+        comboBox_Atype->setEditable(true);
+
+        gridLayout_matrixamake->addWidget(comboBox_Atype, 1, 1, 1, 1);
+
+        label_name_Atype = new QLabel(gridLayoutWidget_5);
+        label_name_Atype->setObjectName(QString::fromUtf8("label_name_Atype"));
+
+        gridLayout_matrixamake->addWidget(label_name_Atype, 0, 1, 1, 1);
+
+        label_name_Amin = new QLabel(gridLayoutWidget_5);
+        label_name_Amin->setObjectName(QString::fromUtf8("label_name_Amin"));
+
+        gridLayout_matrixamake->addWidget(label_name_Amin, 2, 0, 1, 1);
+
+        spinBox_Arow = new QSpinBox(gridLayoutWidget_5);
+        spinBox_Arow->setObjectName(QString::fromUtf8("spinBox_Arow"));
+        spinBox_Arow->setMinimum(1);
+        spinBox_Arow->setMaximum(10000);
+
+        gridLayout_matrixamake->addWidget(spinBox_Arow, 1, 0, 1, 1);
+
+        label_name_ARow = new QLabel(gridLayoutWidget_5);
+        label_name_ARow->setObjectName(QString::fromUtf8("label_name_ARow"));
+
+        gridLayout_matrixamake->addWidget(label_name_ARow, 0, 0, 1, 1);
+
+        label_name_Amax = new QLabel(gridLayoutWidget_5);
+        label_name_Amax->setObjectName(QString::fromUtf8("label_name_Amax"));
+
+        gridLayout_matrixamake->addWidget(label_name_Amax, 2, 1, 1, 1);
+
+        doubleSpinBox_Amin = new QDoubleSpinBox(gridLayoutWidget_5);
+        doubleSpinBox_Amin->setObjectName(QString::fromUtf8("doubleSpinBox_Amin"));
+
+        gridLayout_matrixamake->addWidget(doubleSpinBox_Amin, 3, 0, 1, 1);
+
+        doubleSpinBox_Amax = new QDoubleSpinBox(gridLayoutWidget_5);
+        doubleSpinBox_Amax->setObjectName(QString::fromUtf8("doubleSpinBox_Amax"));
+
+        gridLayout_matrixamake->addWidget(doubleSpinBox_Amax, 3, 1, 1, 1);
+
+
+        gridLayout_randommaker->addLayout(gridLayout_matrixamake, 2, 0, 1, 1);
+
+        gridLayout_setsameside = new QGridLayout();
+        gridLayout_setsameside->setSpacing(6);
+        gridLayout_setsameside->setObjectName(QString::fromUtf8("gridLayout_setsameside"));
+        label_name_sameside = new QLabel(gridLayoutWidget_5);
+        label_name_sameside->setObjectName(QString::fromUtf8("label_name_sameside"));
+
+        gridLayout_setsameside->addWidget(label_name_sameside, 0, 0, 1, 1);
+
+        spinBox_sameside = new QSpinBox(gridLayoutWidget_5);
+        spinBox_sameside->setObjectName(QString::fromUtf8("spinBox_sameside"));
+        spinBox_sameside->setMinimum(1);
+        spinBox_sameside->setMaximum(10000);
+
+        gridLayout_setsameside->addWidget(spinBox_sameside, 1, 0, 1, 1);
+
+
+        gridLayout_randommaker->addLayout(gridLayout_setsameside, 4, 0, 1, 1);
+
         QtMatrixOpenMPClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(QtMatrixOpenMPClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1221, 26));
+        menuBar->setGeometry(QRect(0, 0, 926, 26));
         QtMatrixOpenMPClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(QtMatrixOpenMPClass);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -425,32 +444,34 @@ public:
         label_name_algoformer->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265\345\210\222\345\210\206\347\256\227\346\263\225\351\200\211\346\213\251", nullptr));
         label_name_algolatter->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265\347\233\270\344\271\230\347\256\227\346\263\225\351\200\211\346\213\251", nullptr));
         label_name_corenum->setText(QApplication::translate("QtMatrixOpenMPClass", "cpu\346\240\270\345\277\203\346\225\260", nullptr));
-        label_name_ARow->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265A\350\241\214\346\225\260", nullptr));
-        label_name_sameside->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\233\270\345\220\214\350\276\271\351\225\277", nullptr));
-        label_name_Bcol->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265B\345\210\227\346\225\260", nullptr));
-        label_name_Atype->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265A\347\261\273\345\236\213", nullptr));
-        label_name_Btype->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265B\347\261\273\345\236\213", nullptr));
-        label_name_Amin->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265A\346\234\200\345\260\217\345\200\274", nullptr));
-        label_name_Amax->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265A\346\234\200\345\244\247\345\200\274", nullptr));
-        label_name_Bmin->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265B\346\234\200\345\260\217\345\200\274", nullptr));
-        label_name_Bmax->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265B\346\234\200\345\244\247\345\200\274", nullptr));
-        label_name_makematrix->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\224\237\346\210\220\347\237\251\351\230\265", nullptr));
+        pushButton_coutdata->setText(QApplication::translate("QtMatrixOpenMPClass", "\345\257\274\345\207\272\346\225\260\346\215\256", nullptr));
+        pushButton_showcudares->setText(QApplication::translate("QtMatrixOpenMPClass", "CudaMul", nullptr));
         label_name_matrixmaker->setText(QApplication::translate("QtMatrixOpenMPClass", "\351\232\217\346\234\272\347\237\251\351\230\265\347\224\237\346\210\220\345\231\250", nullptr));
-        comboBox_Atype->setItemText(0, QApplication::translate("QtMatrixOpenMPClass", "Integer", nullptr));
-        comboBox_Atype->setItemText(1, QApplication::translate("QtMatrixOpenMPClass", "Float", nullptr));
-        comboBox_Atype->setItemText(2, QApplication::translate("QtMatrixOpenMPClass", "Double", nullptr));
-        comboBox_Atype->setItemText(3, QApplication::translate("QtMatrixOpenMPClass", "Long Long", nullptr));
-
+        label_name_makematrix->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\224\237\346\210\220\347\237\251\351\230\265", nullptr));
+        pushButton_confirmmake->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\241\256\350\256\244\347\224\237\346\210\220", nullptr));
+        label_blank4->setText(QString());
+        label_blank2->setText(QString());
+        label_blank3->setText(QString());
+        label_blank1->setText(QString());
         comboBox_Btype->setItemText(0, QApplication::translate("QtMatrixOpenMPClass", "Integer", nullptr));
         comboBox_Btype->setItemText(1, QApplication::translate("QtMatrixOpenMPClass", "Float", nullptr));
         comboBox_Btype->setItemText(2, QApplication::translate("QtMatrixOpenMPClass", "Double", nullptr));
         comboBox_Btype->setItemText(3, QApplication::translate("QtMatrixOpenMPClass", "Long Long", nullptr));
 
-        pushButton_confirmmake->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\241\256\350\256\244\347\224\237\346\210\220", nullptr));
-        pushButton_showcpucurve->setText(QApplication::translate("QtMatrixOpenMPClass", "\346\230\276\347\244\272\351\200\211\344\270\255\347\232\204cpu\345\215\240\347\224\250\346\233\262\347\272\277", nullptr));
-        pushButton_showmemcurve->setText(QApplication::translate("QtMatrixOpenMPClass", "\346\230\276\347\244\272\351\200\211\344\270\255\347\232\204\345\206\205\345\255\230\345\215\240\347\224\250\346\233\262\347\272\277", nullptr));
-        pushButton_coutdata->setText(QApplication::translate("QtMatrixOpenMPClass", "\345\257\274\345\207\272\346\225\260\346\215\256", nullptr));
-        pushButton_showcudares->setText(QApplication::translate("QtMatrixOpenMPClass", "CudaMul", nullptr));
+        label_name_Bcol->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265B\345\210\227\346\225\260", nullptr));
+        label_name_Btype->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265B\347\261\273\345\236\213", nullptr));
+        label_name_Bmax->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265B\346\234\200\345\244\247\345\200\274", nullptr));
+        label_name_Bmin->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265B\346\234\200\345\260\217\345\200\274", nullptr));
+        comboBox_Atype->setItemText(0, QApplication::translate("QtMatrixOpenMPClass", "Integer", nullptr));
+        comboBox_Atype->setItemText(1, QApplication::translate("QtMatrixOpenMPClass", "Float", nullptr));
+        comboBox_Atype->setItemText(2, QApplication::translate("QtMatrixOpenMPClass", "Double", nullptr));
+        comboBox_Atype->setItemText(3, QApplication::translate("QtMatrixOpenMPClass", "Long Long", nullptr));
+
+        label_name_Atype->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265A\347\261\273\345\236\213", nullptr));
+        label_name_Amin->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265A\346\234\200\345\260\217\345\200\274", nullptr));
+        label_name_ARow->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265A\350\241\214\346\225\260", nullptr));
+        label_name_Amax->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265A\346\234\200\345\244\247\345\200\274", nullptr));
+        label_name_sameside->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\233\270\345\220\214\350\276\271\351\225\277", nullptr));
     } // retranslateUi
 
 };

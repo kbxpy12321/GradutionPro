@@ -25,4 +25,10 @@ public:
 	static Matrix* matrixMulAndInsertByBlock(Matrix *matrixA, Matrix *matrixB, Matrix *matrixC, int blockIdA, int blockIdB, int sideDivision, int coreNum);
 	static int matrixTypeDecision(int typeA, int typeB);
 	static Matrix* expandMatrixWithZero(Matrix *outMatrix, int newRow, int newCol);
+
+	using TYPENOW = int;
+	static int TYPEINT;
+	static float TYPEFLOAT;
+	static double TYPEDOUBLE;
+	static long long TYPELONG;
 };

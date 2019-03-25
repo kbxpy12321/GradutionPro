@@ -18,8 +18,19 @@ __global__ void kernelAddConstant(int *g_a, const int b)
 	g_a[idx] += b;
 }
 
-__global__ void kernelMatrixMul(int *matrixA, int *matrixB, int *matrixC, int sameside) {
-	
+//__global__ void kernelMatrixMul(int *matrixA, int *matrixB, int *matrixC, int sameside) {
+//	
+//	int col = sizeof(matrixB) / sizeof(matrixB[0]) / sameside;
+//	int idx = blockIdx.x * blockDim.x + threadIdx.x;
+//	matrixC[idx] = 0;
+//	for (int i = 0; i < sameside; i++) {
+//		matrixC[idx] += matrixA[blockIdx.x * sameside + i] * matrixB[i * col + threadIdx.x];
+//	}
+//}
+
+template<typename T>
+__global__ void kernelMatrixMul(T *matrixA, T *matrixB, T *matrixC, int sameside) {
+
 	int col = sizeof(matrixB) / sizeof(matrixB[0]) / sameside;
 	int idx = blockIdx.x * blockDim.x + threadIdx.x;
 	matrixC[idx] = 0;
@@ -32,22 +43,28 @@ __global__ void kernelMatrixAdd(Matrix *matrixA, Matrix *matrixB) {
 	
 }
 
+using TYPENOW = int;
+
+
+
 extern "C" Matrix *matrixMulByCuda(Matrix *matrixA, Matrix* matrixB) { 
 	if (matrixA == NULL || matrixB == NULL || matrixA->getType() != INTEGER || matrixB->getType() != INTEGER || matrixB->getCol() > 1024) {
 		return nullptr;
 	}
+	
 	int row = matrixA->getRow();
 	int col = matrixB->getCol();
 	int sameSide = matrixA->getCol();
 	int fullLen = matrixA->getRow() * matrixB->getCol();
 	thrust::device_vector<int> res(fullLen);
-	thrust::device_vector<int> matrixATmp(matrixA->returnVector());
-	thrust::device_vector<int> matrixBTmp(matrixB->returnVector());
+	thrust::device_vector<int> matrixATmp(matrixA->returnVector<std::vector<int>>());
+	thrust::device_vector<int> matrixBTmp(matrixB->returnVector<std::vector<int>>());
 	int* tmpA = thrust::raw_pointer_cast(matrixATmp.data());
 	int* tmpB = thrust::raw_pointer_cast(matrixATmp.data());
 	int* tmpC = thrust::raw_pointer_cast(res.data());
 	kernelMatrixMul << <row, col>> > (tmpA, tmpB, tmpC, sameSide);
-	//matrixA->printMatrix();
+	Matrix *matrixRes = new Matrix();
+	//matrixRes->initVectorByArray(tmpC, matrixA->getRow(), matrixB->getCol(), MatrixCalculation::matrixTypeDecision(matrixA->getType(), matrixB->getType()));
 	return nullptr;
 }
 
