@@ -6,10 +6,6 @@
 #include <helper_functions.h>
 #include <Matrix.h>
 #include <MatrixCalculation.h>
-#include <thrust/host_vector.h>
-#include <thrust/device_vector.h>
-#include <thrust/device_new.h>
-#include <thrust/device_ptr.h>
 
 using namespace std;
 __global__ void kernelAddConstant(int *g_a, const int b)
@@ -43,8 +39,6 @@ __global__ void kernelMatrixAdd(Matrix *matrixA, Matrix *matrixB) {
 	
 }
 
-using TYPENOW = int;
-
 
 
 extern "C" Matrix *matrixMulByCuda(Matrix *matrixA, Matrix* matrixB) { 
@@ -56,16 +50,35 @@ extern "C" Matrix *matrixMulByCuda(Matrix *matrixA, Matrix* matrixB) {
 	int col = matrixB->getCol();
 	int sameSide = matrixA->getCol();
 	int fullLen = matrixA->getRow() * matrixB->getCol();
-	thrust::device_vector<int> res(fullLen);
-	thrust::device_vector<int> matrixATmp(matrixA->returnVector<std::vector<int>>());
-	thrust::device_vector<int> matrixBTmp(matrixB->returnVector<std::vector<int>>());
-	int* tmpA = thrust::raw_pointer_cast(matrixATmp.data());
-	int* tmpB = thrust::raw_pointer_cast(matrixATmp.data());
-	int* tmpC = thrust::raw_pointer_cast(res.data());
-	kernelMatrixMul << <row, col>> > (tmpA, tmpB, tmpC, sameSide);
+	int sizeA = row * matrixA->getCol();
+	int sizeB = col * matrixB->getRow();
+	int finalType = MatrixCalculation::matrixTypeDecision(matrixA->getType(), matrixB->getType());
+	int tmpType;
+
+	using TYPENOW = int;
+	TYPENOW* dev_A;
+	TYPENOW* host_A;
+	//host_A = (matrixA->returnVector<std::vector<TYPENOW>>()).data();
+	cudaMalloc((void **)dev_A, sizeA * sizeof(TYPENOW));
+	cudaMemcpy(dev_A, host_A, sizeA * sizeof(TYPENOW), cudaMemcpyHostToDevice);
+
+	//changeTypeNow(matrixB->getType());
+	TYPENOW* dev_B;
+	TYPENOW* host_B;
+	//host_B = (matrixB->returnVector<std::vector<TYPENOW>>()).data();
+	cudaMalloc((void **)dev_B, sizeB * sizeof(TYPENOW));
+	cudaMemcpy(dev_B, host_B, sizeB * sizeof(TYPENOW), cudaMemcpyHostToDevice);
+
+
+	//changeTypeNow(finalType);
+	TYPENOW *dev_C;
+	cudaMalloc((void **)dev_C, fullLen * sizeof(TYPENOW));
+
+	kernelMatrixMul << <row, col>> > (dev_A, dev_B, dev_C, sameSide);
+
 	Matrix *matrixRes = new Matrix();
-	//matrixRes->initVectorByArray(tmpC, matrixA->getRow(), matrixB->getCol(), MatrixCalculation::matrixTypeDecision(matrixA->getType(), matrixB->getType()));
-	return nullptr;
+	//matrixRes->initVectorByArray(dev_C, matrixA->getRow(), matrixB->getCol(), finalType);
+	return matrixRes;
 }
 
 extern "C" int testInCuda() {

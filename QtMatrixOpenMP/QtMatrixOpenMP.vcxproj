@@ -137,6 +137,7 @@
     <QtRcc Include="QtMatrixOpenMP.qrc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CudaMatrixCalculation.cuh" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MatrixCalculation.h" />
   </ItemGroup>
