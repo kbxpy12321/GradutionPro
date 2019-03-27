@@ -4,9 +4,9 @@
 #include <cuda_runtime.h>
 #include <device_launch_parameters.h>
 #include <helper_functions.h>
-#include <Matrix.h>
-#include <MatrixCalculation.h>
-#include <CudaMatrixCalculation.cuh>
+#include "Matrix.h"
+#include "MatrixCalculation.h"
+#include "CudaMatrixCalculation.cuh"
 
 using namespace std;
 __global__ void kernelAddConstant(int *g_a, const int b)
@@ -25,6 +25,13 @@ __global__ void kernelAddConstant(int *g_a, const int b)
 //	}
 //}
 
+
+
+__global__ void kernelMatrixAdd(Matrix *matrixA, Matrix *matrixB) {
+	
+}
+
+
 template<typename matrixAT, typename matrixBT, typename matrixCT>
 __global__ void kernelMatrixMul(matrixAT *matrixA, matrixBT *matrixB, matrixCT *matrixC, int sameside) {
 
@@ -34,56 +41,54 @@ __global__ void kernelMatrixMul(matrixAT *matrixA, matrixBT *matrixB, matrixCT *
 	for (int i = 0; i < sameside; i++) {
 		matrixC[idx] += matrixA[blockIdx.x * sameside + i] * matrixB[i * col + threadIdx.x];
 	}
-}
+};
 
-__global__ void kernelMatrixAdd(Matrix *matrixA, Matrix *matrixB) {
-	
-}
+template <typename matrixAT, typename matrixBT, typename matrixCT>
+Matrix *matrixMulByCuda(Matrix *matrixA, Matrix* matrixB) {
+	if (matrixA == NULL || matrixB == NULL || matrixB->getCol() > 1024) {
+		return nullptr;
+	}
 
+	int row = matrixA->getRow();
+	int col = matrixB->getCol();
+	int sameSide = matrixA->getCol();
+	int fullLen = matrixA->getRow() * matrixB->getCol();
+	int sizeA = row * matrixA->getCol();
+	int sizeB = col * matrixB->getRow();
+	int finalType = MatrixCalculation::matrixTypeDecision(matrixA->getType(), matrixB->getType());
+
+	matrixAT* dev_A;
+	matrixAT* host_A;
+	host_A = (matrixAT*)(matrixA->returnVectorData());
+	cudaMalloc((void **)dev_A, sizeA * sizeof(matrixAT));
+	cudaMemcpy(dev_A, host_A, sizeA * sizeof(matrixAT), cudaMemcpyHostToDevice);
+
+	matrixBT* dev_B;
+	matrixBT* host_B;
+	host_B = (matrixBT*)(matrixA->returnVectorData());
+	cudaMalloc((void **)dev_B, sizeB * sizeof(matrixBT));
+	cudaMemcpy(dev_B, host_B, sizeB * sizeof(matrixBT), cudaMemcpyHostToDevice);
+
+	matrixCT *dev_C, *host_C;
+	cudaMalloc((void **)dev_C, fullLen * sizeof(matrixCT));
+
+	kernelMatrixMul<matrixAT, matrixBT, matrixCT> << <row, col >> > (dev_A, dev_B, dev_C, sameSide);
+
+	Matrix *matrixRes = new Matrix(matrixA->getRow(), matrixB->getCol(), finalType);
+	matrixRes->initVectorSpace();
+	host_C = (matrixCT*)(matrixRes->returnVectorData());
+	cudaMemcpy(dev_C, host_C, fullLen * sizeof(matrixCT), cudaMemcpyDeviceToHost);
+
+	cudaFree(dev_A);
+	cudaFree(dev_B);
+	cudaFree(dev_C);
+
+	return matrixRes;
+};
 
 namespace CudaMatrixCal {
-	template <typename matrixAT, typename matrixBT, typename matrixCT>
-	Matrix *matrixMulByCuda(Matrix *matrixA, Matrix* matrixB) {
-		if (matrixA == NULL || matrixB == NULL || matrixA->getType() != INTEGER || matrixB->getType() != INTEGER || matrixB->getCol() > 1024) {
-			return nullptr;
-		}
-
-		int row = matrixA->getRow();
-		int col = matrixB->getCol();
-		int sameSide = matrixA->getCol();
-		int fullLen = matrixA->getRow() * matrixB->getCol();
-		int sizeA = row * matrixA->getCol();
-		int sizeB = col * matrixB->getRow();
-		int finalType = MatrixCalculation::matrixTypeDecision(matrixA->getType(), matrixB->getType());
-
-		matrixAT* dev_A;
-		matrixAT* host_A;
-		host_A = (matrixAT* )(matrixA->returnVectorData());
-		cudaMalloc((void **)dev_A, sizeA * sizeof(matrixAT));
-		cudaMemcpy(dev_A, host_A, sizeA * sizeof(matrixAT), cudaMemcpyHostToDevice);
-
-		matrixBT* dev_B;
-		matrixBT* host_B;
-		host_B = (matrixBT*)(matrixA->returnVectorData());
-		cudaMalloc((void **)dev_B, sizeB * sizeof(matrixBT));
-		cudaMemcpy(dev_B, host_B, sizeB * sizeof(matrixBT), cudaMemcpyHostToDevice);
-
-		matrixCT *dev_C, *host_C;
-		cudaMalloc((void **)dev_C, fullLen * sizeof(matrixCT));
-
-		kernelMatrixMul<matrixAT, matrixBT, matrixCT> << <row, col >> > (dev_A, dev_B, dev_C, sameSide);
-
-		Matrix *matrixRes = new Matrix(matrixA->getRow(), matrixB->getCol(), finalType);
-		matrixRes->initVectorSpace();
-		host_C = (matrixCT*)(matrixRes->returnVectorData());
-		cudaMemcpy(dev_C, host_C, fullLen * sizeof(matrixCT), cudaMemcpyDeviceToHost);
-
-		cudaFree(dev_A);
-		cudaFree(dev_B);
-		cudaFree(dev_C);
-
-		return matrixRes;
-	}
+	
+	
 }
 
 

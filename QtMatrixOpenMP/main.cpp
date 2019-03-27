@@ -1,5 +1,6 @@
 #include "QtMatrixOpenMP.h"
 #include <QtWidgets/QApplication>
+#include <Matrix.h>
 
 int main(int argc, char *argv[])
 {

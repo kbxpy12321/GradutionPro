@@ -37,9 +37,6 @@ public:
 	void setType(int type);
 	int getType();
 	void* returnVectorData();
-
-	template <typename T>
-	void initVectorByArray(T *outArray, int row, int col, int type);
 	void changeType(int matrixType);
 	void clearTypeMatrix();
 	double getMatrixElement(int x, int y);
@@ -52,6 +49,7 @@ public:
 	void matrixPush(double x);
 	bool matrixCompare(Matrix *outMatrix);
 	~Matrix();
+
 
 private:
 	int row, col;

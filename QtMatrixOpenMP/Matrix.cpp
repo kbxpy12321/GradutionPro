@@ -50,17 +50,7 @@ void Matrix::setType(int type) {
 	}
 	this->matrixType = type;
 }
-template <typename T>
-void Matrix::initVectorByArray(T *outArray,int row, int col, int type) {
-	clearTypeMatrix();
-	this->setRow(row);
-	this->setCol(col);
-	this->setType(type);
-	int tmpLen = sideof(outArray) / sideof(T);
-	for (int i = 0; i < tmpLen; i++) {
-		this->matrixPush(outArray[i]);
-	}
-}
+
 
 void Matrix::printMatrix() {
 	int row = getRow();
