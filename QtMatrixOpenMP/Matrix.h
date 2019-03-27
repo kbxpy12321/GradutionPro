@@ -36,8 +36,7 @@ public:
 	void setCol(int col);
 	void setType(int type);
 	int getType();
-	template <typename T>
-	T returnVector();
+	void* returnVectorData();
 
 	template <typename T>
 	void initVectorByArray(T *outArray, int row, int col, int type);

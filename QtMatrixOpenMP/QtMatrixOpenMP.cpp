@@ -6,17 +6,14 @@
 #include <QMessageBox>
 #include <omp.h>
 
+#include <CudaMatrixCalculation.cuh>
+
 #define tableViewCalQueueCol 3
 #define tableViewShowRes 3
 
 QStandardItemModel *modelInTableViewCalQueue;
 QStandardItemModel *modelInTableViewShowRes;
 Matrix *matrixA, *matrixB;
-
-extern "C" {
-	int testInCuda();
-	Matrix *matrixMulByCuda(Matrix *matrixA, Matrix *matrixB);
-}
 
 void QtMatrixOpenMP::initButton() {
 	connect(ui.pushButton_insertqueque, SIGNAL(clicked()), this, SLOT(clickPushButton_InsertQueque()));
@@ -196,8 +193,8 @@ void QtMatrixOpenMP::clickPushButton_ShowCudaRes()
 {
 	clock_t start, end;
 	start = clock();
-	//ui.pushButton_showcudares->setText(QString::number(testInCuda()));
-	matrixMulByCuda(matrixA, matrixB);
+	//ui.pushButton_showcudares->setText(QString::number(testCuda::testInCuda()));
+	//CudaMatrixCal::matrixMulByCuda(matrixA, matrixB);//TODO
 	end = clock();
 	QList<QStandardItem*> itemIntoTableViewShowRes;
 	itemIntoTableViewShowRes.append(new QStandardItem(QString::fromLocal8Bit("Cuda≤¢––À„∑®")));

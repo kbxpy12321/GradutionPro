@@ -26,21 +26,21 @@ void Matrix::randomMatrix(int row, int col, int matrixType, int MIN, int MAX) {
 void Matrix::readMatrix() {
 
 }
-template <typename T>
-T Matrix::returnVector() {
+
+void* Matrix::returnVectorData() {
 	if (this->getType() == INTEGER) {
-		return integerMatrix;
+		return integerMatrix.data();
 	}
 	if (this->getType() == FLOAT) {
-		return floatMatrix;
+		return floatMatrix.data();
 	}
 	if (this->getType() == DOUBLE) {
-		return doubleMatrix;
+		return doubleMatrix.data();
 	}
 	if (this->getType() == LONGLONG) {
-		return longMatrix;
+		return longMatrix.data();
 	}
-	return integerMatrix;
+	return integerMatrix.data();
 }
 
 void Matrix::setType(int type) {
