@@ -15,6 +15,8 @@ QStandardItemModel *modelInTableViewCalQueue;
 QStandardItemModel *modelInTableViewShowRes;
 Matrix *matrixA, *matrixB;
 
+extern "C" Matrix *matrixMulByCuda(Matrix *matrixA, Matrix *matrixB);
+
 void QtMatrixOpenMP::initButton() {
 	connect(ui.pushButton_insertqueque, SIGNAL(clicked()), this, SLOT(clickPushButton_InsertQueque()));
 	connect(ui.pushButton_deleteque, SIGNAL(clicked()), this, SLOT(clickPushButton_DeleteQueue()));
@@ -194,7 +196,7 @@ void QtMatrixOpenMP::clickPushButton_ShowCudaRes()
 	clock_t start, end;
 	start = clock();
 	//ui.pushButton_showcudares->setText(QString::number(testCuda::testInCuda()));
-	Matrix *test1 = CudaMatrixCal::matrixMulByCuda(matrixA, matrixB);//TODO
+	Matrix *test1 = matrixMulByCuda(matrixA, matrixB);//TODO
 	//Matrix *test2 = MatrixCalculation::matrixMul(matrixA, matrixB);
 	end = clock();
 	test1->printMatrix();

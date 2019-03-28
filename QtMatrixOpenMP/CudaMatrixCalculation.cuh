@@ -15,6 +15,6 @@ namespace CudaMatrixCal {
 		return 1;
 	};
 
-	Matrix *matrixMulByCuda(Matrix *matrixA, Matrix *matrixB);
+	//Matrix *matrixMulByCuda(Matrix *matrixA, Matrix *matrixB);
 	
 }

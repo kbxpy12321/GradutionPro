@@ -84,17 +84,19 @@ Matrix *matrixMul(Matrix *matrixA, Matrix* matrixB) {
 	return matrixRes;
 };
 
-Matrix *ttt() {
-	Matrix *a = new Matrix(3,3,1);
-	return a;
+
+
+extern "C" Matrix *matrixMulByCuda(Matrix *matrixA, Matrix *matrixB) {
+	return matrixMul<int, int, int>(matrixA, matrixB);
 }
 
 namespace CudaMatrixCal {
-	
-	Matrix *matrixMulByCuda(Matrix *matrixA, Matrix *matrixB) {
-		//return matrixMul<int, int, int>(matrixA, matrixB);
-		return ttt();//TODO
+	Matrix *ttt() {
+		Matrix *a = new Matrix(3, 3, 1);
+		return a;
 	}
+
+	
 }
 
 
