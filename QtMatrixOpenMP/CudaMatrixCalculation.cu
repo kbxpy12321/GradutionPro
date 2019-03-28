@@ -44,7 +44,7 @@ __global__ void kernelMatrixMul(matrixAT *matrixA, matrixBT *matrixB, matrixCT *
 };
 
 template <typename matrixAT, typename matrixBT, typename matrixCT>
-Matrix *matrixMulByCuda(Matrix *matrixA, Matrix* matrixB) {
+Matrix *matrixMul(Matrix *matrixA, Matrix* matrixB) {
 	if (matrixA == NULL || matrixB == NULL || matrixB->getCol() > 1024) {
 		return nullptr;
 	}
@@ -87,8 +87,9 @@ Matrix *matrixMulByCuda(Matrix *matrixA, Matrix* matrixB) {
 };
 
 namespace CudaMatrixCal {
-	
-	
+	Matrix *matrixMulByCuda(Matrix *matrixA, Matrix *matrixB) {
+		return matrixMul<int, int, int>(matrixA, matrixB);
+	}
 }
 
 

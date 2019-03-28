@@ -191,15 +191,15 @@ void QtMatrixOpenMP::doAlgo(QString algoFormer, QString algoLatter, int coreNum)
 
 void QtMatrixOpenMP::clickPushButton_ShowCudaRes()
 {
-	//clock_t start, end;
-	//start = clock();
-	////ui.pushButton_showcudares->setText(QString::number(testCuda::testInCuda()));
-	//Matrix *test1 = CudaMatrixCal::matrixMulByCuda<int, int, int>(matrixA, matrixB);//TODO
-	//Matrix *test2 = MatrixCalculation::matrixMul(matrixA, matrixB);
-	//if (test2->matrixCompare(test1)) {
-	//	ui.pushButton_showcudares->setText(QString::number(1));
-	//}
-	//end = clock();
+	clock_t start, end;
+	start = clock();
+	//ui.pushButton_showcudares->setText(QString::number(testCuda::testInCuda()));
+	Matrix *test1 = CudaMatrixCal::matrixMulByCuda(matrixA, matrixB);//TODO
+	Matrix *test2 = MatrixCalculation::matrixMul(matrixA, matrixB);
+	if (test2->matrixCompare(test1)) {
+		ui.pushButton_showcudares->setText(QString::number(1));
+	}
+	end = clock();
 
 	//int c = CudaMatrixCal::testCCCC<int>(matrixA);
 	
