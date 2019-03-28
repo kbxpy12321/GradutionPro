@@ -195,12 +195,9 @@ void QtMatrixOpenMP::clickPushButton_ShowCudaRes()
 	start = clock();
 	//ui.pushButton_showcudares->setText(QString::number(testCuda::testInCuda()));
 	Matrix *test1 = CudaMatrixCal::matrixMulByCuda(matrixA, matrixB);//TODO
-	Matrix *test2 = MatrixCalculation::matrixMul(matrixA, matrixB);
-	if (test2->matrixCompare(test1)) {
-		ui.pushButton_showcudares->setText(QString::number(1));
-	}
+	//Matrix *test2 = MatrixCalculation::matrixMul(matrixA, matrixB);
 	end = clock();
-
+	test1->printMatrix();
 	//int c = CudaMatrixCal::testCCCC<int>(matrixA);
 	
 

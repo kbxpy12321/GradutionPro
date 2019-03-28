@@ -28,13 +28,12 @@ __global__ void kernelAddConstant(int *g_a, const int b)
 
 
 __global__ void kernelMatrixAdd(Matrix *matrixA, Matrix *matrixB) {
-	
+
 }
 
 
 template<typename matrixAT, typename matrixBT, typename matrixCT>
 __global__ void kernelMatrixMul(matrixAT *matrixA, matrixBT *matrixB, matrixCT *matrixC, int sameside) {
-
 	int col = sizeof(matrixB) / sizeof(matrixB[0]) / sameside;
 	int idx = blockIdx.x * blockDim.x + threadIdx.x;
 	matrixC[idx] = 0;
@@ -48,7 +47,6 @@ Matrix *matrixMul(Matrix *matrixA, Matrix* matrixB) {
 	if (matrixA == NULL || matrixB == NULL || matrixB->getCol() > 1024) {
 		return nullptr;
 	}
-
 	int row = matrixA->getRow();
 	int col = matrixB->getCol();
 	int sameSide = matrixA->getCol();
@@ -60,17 +58,17 @@ Matrix *matrixMul(Matrix *matrixA, Matrix* matrixB) {
 	matrixAT* dev_A;
 	matrixAT* host_A;
 	host_A = (matrixAT*)(matrixA->returnVectorData());
-	cudaMalloc((void **)dev_A, sizeA * sizeof(matrixAT));
+	cudaMalloc((void **)&dev_A, sizeA * sizeof(matrixAT));
 	cudaMemcpy(dev_A, host_A, sizeA * sizeof(matrixAT), cudaMemcpyHostToDevice);
 
 	matrixBT* dev_B;
 	matrixBT* host_B;
-	host_B = (matrixBT*)(matrixA->returnVectorData());
-	cudaMalloc((void **)dev_B, sizeB * sizeof(matrixBT));
+	host_B = (matrixBT*)(matrixB->returnVectorData());
+	cudaMalloc((void **)&dev_B, sizeB * sizeof(matrixBT));
 	cudaMemcpy(dev_B, host_B, sizeB * sizeof(matrixBT), cudaMemcpyHostToDevice);
 
 	matrixCT *dev_C, *host_C;
-	cudaMalloc((void **)dev_C, fullLen * sizeof(matrixCT));
+	cudaMalloc((void **)&dev_C, fullLen * sizeof(matrixCT));
 
 	kernelMatrixMul<matrixAT, matrixBT, matrixCT> << <row, col >> > (dev_A, dev_B, dev_C, sameSide);
 
@@ -86,9 +84,16 @@ Matrix *matrixMul(Matrix *matrixA, Matrix* matrixB) {
 	return matrixRes;
 };
 
+Matrix *ttt() {
+	Matrix *a = new Matrix(3,3,1);
+	return a;
+}
+
 namespace CudaMatrixCal {
+	
 	Matrix *matrixMulByCuda(Matrix *matrixA, Matrix *matrixB) {
-		return matrixMul<int, int, int>(matrixA, matrixB);
+		//return matrixMul<int, int, int>(matrixA, matrixB);
+		return ttt();//TODO
 	}
 }
 
