@@ -200,7 +200,9 @@ void QtMatrixOpenMP::clickPushButton_ShowCudaRes()
 	//Matrix *test2 = MatrixCalculation::matrixMul(matrixA, matrixB);
 	end = clock();
 	test1->printMatrix();
-	//int c = CudaMatrixCal::testCCCC<int>(matrixA);
+	Matrix *test2 = MatrixCalculation::matrixMul(matrixA, matrixB);
+	int a = test2->matrixCompare(test1);
+	ui.pushButton_showcudares->setText(QString::number(a));
 	
 
 	//QList<QStandardItem*> itemIntoTableViewShowRes;

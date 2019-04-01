@@ -33,14 +33,38 @@ __global__ void kernelMatrixAdd(Matrix *matrixA, Matrix *matrixB) {
 
 
 template<typename matrixAT, typename matrixBT, typename matrixCT>
-__global__ void kernelMatrixMul(matrixAT *matrixA, matrixBT *matrixB, matrixCT *matrixC, int sameside) {
-	int col = sizeof(matrixB) / sizeof(matrixB[0]) / sameside;
+__global__ void kernelMatrixMul(matrixAT *matrixA, matrixBT *matrixB, matrixCT *matrixC, int sameside, int col) {
 	int idx = blockIdx.x * blockDim.x + threadIdx.x;
+
+	/*if (blockIdx.x == 0 && threadIdx.x == 0) {
+		printf("sizeof matrixb: %d", sizeof(matrixB));
+		printf("device: \n");
+		for (int i = 0; i < 16; i++) {
+			printf("%d %d\n", matrixA[i], matrixB[i]);
+		}
+		printf("\n");
+	}
+
+	printf("device: col: %d blockidx: %d blockDimx: %d threadIdx: %d\n", col, blockIdx.x, blockDim.x, threadIdx.x);
+	printf("\n");*/
+
 	matrixC[idx] = 0;
 	for (int i = 0; i < sameside; i++) {
 		matrixC[idx] += matrixA[blockIdx.x * sameside + i] * matrixB[i * col + threadIdx.x];
+		//printf("%d %d\n", matrixA[blockIdx.x * sameside + i], matrixB[i * col + threadIdx.x]);
 	}
 };
+
+
+template<typename matrixCT>
+__global__ void kernelTestRes(matrixCT *matrixRes, int row, int col) {
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
+			printf("%d ", matrixRes[i * col + j]);
+		}
+		printf("\n");
+	}
+}
 
 template <typename matrixAT, typename matrixBT, typename matrixCT>
 Matrix *matrixMul(Matrix *matrixA, Matrix* matrixB) {
@@ -67,15 +91,24 @@ Matrix *matrixMul(Matrix *matrixA, Matrix* matrixB) {
 	cudaMalloc((void **)&dev_B, sizeB * sizeof(matrixBT));
 	cudaMemcpy(dev_B, host_B, sizeB * sizeof(matrixBT), cudaMemcpyHostToDevice);
 
+	/*printf("host: \n");
+	for (int i = 0; i < 16; i++) {
+		printf("%d %d\n", host_A[i], host_B[i]);
+	}
+	printf("\n");*/
+
 	matrixCT *dev_C, *host_C;
 	cudaMalloc((void **)&dev_C, fullLen * sizeof(matrixCT));
 
-	kernelMatrixMul<matrixAT, matrixBT, matrixCT> << <row, col >> > (dev_A, dev_B, dev_C, sameSide);
+	kernelMatrixMul<matrixAT, matrixBT, matrixCT> << <row, col >> > (dev_A, dev_B, dev_C, sameSide, col);
 
 	Matrix *matrixRes = new Matrix(matrixA->getRow(), matrixB->getCol(), finalType);
 	matrixRes->initVectorSpace();
-	host_C = (matrixCT*)(matrixRes->returnVectorData());
-	cudaMemcpy(dev_C, host_C, fullLen * sizeof(matrixCT), cudaMemcpyDeviceToHost);
+	host_C = (matrixCT* )(matrixRes->returnVectorData());
+	cudaMemcpy(host_C, dev_C, fullLen * sizeof(matrixCT), cudaMemcpyDeviceToHost);
+
+
+	//kernelTestRes<matrixCT> << <1, 1 >> > (dev_C, 4, 4);
 
 	cudaFree(dev_A);
 	cudaFree(dev_B);
