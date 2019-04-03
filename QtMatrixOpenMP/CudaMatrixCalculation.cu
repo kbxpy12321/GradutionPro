@@ -7,6 +7,8 @@
 #include "Matrix.h"
 #include "MatrixCalculation.h"
 #include "CudaMatrixCalculation.cuh"
+#define CUDAMAXTHREADPERBLOCK 1024
+#define CUDAMAXBLOCK 65536
 
 using namespace std;
 __global__ void kernelAddConstant(int *g_a, const int b)
@@ -33,9 +35,10 @@ __global__ void kernelMatrixAdd(Matrix *matrixA, Matrix *matrixB) {
 
 
 template<typename matrixAT, typename matrixBT, typename matrixCT>
-__global__ void kernelMatrixMul(matrixAT *matrixA, matrixBT *matrixB, matrixCT *matrixC, int sameside, int col) {
+__global__ void kernelMatrixMul(matrixAT *matrixA, matrixBT *matrixB, matrixCT *matrixC, int row, int sameside, int col) {
 	int idx = blockIdx.x * blockDim.x + threadIdx.x;
-
+	if (idx >= row * col)
+		return;
 	/*if (blockIdx.x == 0 && threadIdx.x == 0) {
 		printf("sizeof matrixb: %d", sizeof(matrixB));
 		printf("device: \n");
@@ -48,9 +51,13 @@ __global__ void kernelMatrixMul(matrixAT *matrixA, matrixBT *matrixB, matrixCT *
 	printf("device: col: %d blockidx: %d blockDimx: %d threadIdx: %d\n", col, blockIdx.x, blockDim.x, threadIdx.x);
 	printf("\n");*/
 
+	int curRow, curCol;
+	curRow = idx / col;
+	curCol = idx % col;
+
 	matrixC[idx] = 0;
 	for (int i = 0; i < sameside; i++) {
-		matrixC[idx] += matrixA[blockIdx.x * sameside + i] * matrixB[i * col + threadIdx.x];
+		matrixC[idx] += matrixA[curRow * sameside + i] * matrixB[i * col + curCol];
 		//printf("%d %d\n", matrixA[blockIdx.x * sameside + i], matrixB[i * col + threadIdx.x]);
 	}
 };
@@ -68,16 +75,30 @@ __global__ void kernelTestRes(matrixCT *matrixRes, int row, int col) {
 
 template <typename matrixAT, typename matrixBT, typename matrixCT>
 Matrix *matrixMul(Matrix *matrixA, Matrix* matrixB) {
-	if (matrixA == NULL || matrixB == NULL || matrixB->getCol() > 1024) {
+	if (matrixA == NULL || matrixB == NULL) {
+		return nullptr;
+	}
+	int fullLen = matrixA->getRow() * matrixB->getCol();
+	if (fullLen > CUDAMAXTHREADPERBLOCK * CUDAMAXBLOCK) {
 		return nullptr;
 	}
 	int row = matrixA->getRow();
 	int col = matrixB->getCol();
 	int sameSide = matrixA->getCol();
-	int fullLen = matrixA->getRow() * matrixB->getCol();
+	
 	int sizeA = row * matrixA->getCol();
 	int sizeB = col * matrixB->getRow();
 	int finalType = MatrixCalculation::matrixTypeDecision(matrixA->getType(), matrixB->getType());
+
+	int calRow, calCol;
+	calCol = CUDAMAXTHREADPERBLOCK;
+	calRow = fullLen / CUDAMAXTHREADPERBLOCK;
+	if (fullLen % calRow != 0) {
+		calRow++;
+	}
+	if (calRow <= 1) {
+		calCol = col;
+	}
 
 	matrixAT* dev_A;
 	matrixAT* host_A;
@@ -100,7 +121,7 @@ Matrix *matrixMul(Matrix *matrixA, Matrix* matrixB) {
 	matrixCT *dev_C, *host_C;
 	cudaMalloc((void **)&dev_C, fullLen * sizeof(matrixCT));
 
-	kernelMatrixMul<matrixAT, matrixBT, matrixCT> << <row, col >> > (dev_A, dev_B, dev_C, sameSide, col);
+	kernelMatrixMul<matrixAT, matrixBT, matrixCT> << <calRow, calCol >> > (dev_A, dev_B, dev_C, row, sameSide, col);
 
 	Matrix *matrixRes = new Matrix(matrixA->getRow(), matrixB->getCol(), finalType);
 	matrixRes->initVectorSpace();

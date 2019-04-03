@@ -16,11 +16,11 @@
 #include <ctime>
 #include "CudaMatrixCalculation.cuh"
 
-#define MATRIXROWA 4096
+#define MATRIXROWA 55
 
-#define MATRIXSAME 4096
+#define MATRIXSAME 44
 
-#define MATRIXCOLB 1024
+#define MATRIXCOLB 8192
 
 #define MATRIXSIDE 1848
 
@@ -31,7 +31,7 @@ int main() {
 
 	auto *aa = new Matrix();
 	auto *bb = new Matrix();
-	aa->randomMatrix(MATRIXROWA, MATRIXSAME, DOUBLE, 1, 6);
+	aa->randomMatrix(MATRIXROWA, MATRIXSAME, FLOAT, 1, 6);
 	bb->randomMatrix(MATRIXSAME, MATRIXCOLB, LONGLONG, 1, 6);
 
 	start = clock();
