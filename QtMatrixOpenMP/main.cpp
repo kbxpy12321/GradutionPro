@@ -16,9 +16,9 @@
 #include <ctime>
 #include "CudaMatrixCalculation.cuh"
 
-#define MATRIXROWA 2048
+#define MATRIXROWA 4096
 
-#define MATRIXSAME 1024
+#define MATRIXSAME 4096
 
 #define MATRIXCOLB 1024
 
@@ -31,8 +31,8 @@ int main() {
 
 	auto *aa = new Matrix();
 	auto *bb = new Matrix();
-	aa->randomMatrix(MATRIXROWA, MATRIXSAME, INTEGER, 1, 6);
-	bb->randomMatrix(MATRIXSAME, MATRIXCOLB, INTEGER, 1, 6);
+	aa->randomMatrix(MATRIXROWA, MATRIXSAME, DOUBLE, 1, 6);
+	bb->randomMatrix(MATRIXSAME, MATRIXCOLB, LONGLONG, 1, 6);
 
 	start = clock();
 	std::cout << "now start time of normal" << std::endl;

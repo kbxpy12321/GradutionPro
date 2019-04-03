@@ -117,10 +117,70 @@ Matrix *matrixMul(Matrix *matrixA, Matrix* matrixB) {
 	return matrixRes;
 };
 
-
-
 extern "C" Matrix *matrixMulByCuda(Matrix *matrixA, Matrix *matrixB) {
-	return matrixMul<int, int, int>(matrixA, matrixB);
+	int matrixTypeA = matrixA->getType();
+	int matrixTypeB = matrixB->getType();
+	int greaterType = MatrixCalculation::matrixTypeDecision(matrixTypeA, matrixTypeB);
+	if (greaterType == matrixTypeA && greaterType == matrixTypeB) {
+		if (greaterType == INTEGER) {
+			return matrixMul<int, int, int>(matrixA, matrixB);
+		}
+		else if (greaterType == FLOAT) {
+			return matrixMul<float, float, float>(matrixA, matrixB);
+		}
+		else if (greaterType == DOUBLE) {
+			return matrixMul<double, double, double>(matrixA, matrixB);
+		}
+		else if (greaterType == LONGLONG) {
+			return matrixMul<long long, long long, long long>(matrixA, matrixB);
+		}
+		return nullptr;
+	}
+	if (greaterType == matrixTypeA) {
+		if (greaterType == DOUBLE) {
+			if (matrixTypeB == LONGLONG) {
+				return matrixMul<double, long long, double>(matrixA, matrixB);
+			}
+			else if (matrixTypeB == FLOAT) {
+				return matrixMul<double, float, double>(matrixA, matrixB);
+			}
+			else if (matrixTypeB == INTEGER) {
+				return matrixMul<double, int, double>(matrixA, matrixB);
+			}
+		}
+		else if (greaterType == FLOAT) {
+			return matrixMul<float, int, float>(matrixA, matrixB);
+		}
+		else if (greaterType == LONGLONG) {
+			return matrixMul<long long, int, long long>(matrixA, matrixB);
+		}
+		return nullptr;
+	}
+	if (greaterType == matrixTypeB) {
+		if (greaterType == DOUBLE) {
+			if (matrixTypeA == LONGLONG) {
+				return matrixMul<long long, double, double>(matrixA, matrixB);
+			}
+			else if (matrixTypeA == FLOAT) {
+				return matrixMul<float, double, double>(matrixA, matrixB);
+			}
+			else if (matrixTypeA == INTEGER) {
+				return matrixMul<int, double, double>(matrixA, matrixB);
+			}
+		}
+		else if (greaterType == FLOAT) {
+			return matrixMul<int, float, float>(matrixA, matrixB);
+		}
+		else if (greaterType == LONGLONG) {
+			return matrixMul<int, long long, long long>(matrixA, matrixB);
+		}
+		return nullptr;
+	}
+	if (matrixTypeA == LONGLONG)
+		return matrixMul<long long, float, double>(matrixA, matrixB);
+	if (matrixTypeB == LONGLONG)
+		return matrixMul<float, long long, double>(matrixA, matrixB);
+	return nullptr;
 }
 
 namespace CudaMatrixCal {
