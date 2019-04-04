@@ -25,9 +25,12 @@
 #define MATRIXSIDE 1848
 
 extern "C" Matrix *matrixMulByCuda(Matrix *matrixA, Matrix *matrixB);
-int main() {
+extern "C" int testMulCoreSingleGPU();
 
-	clock_t start, ends;
+int main() {
+	
+	testMulCoreSingleGPU();
+	/*clock_t start, ends;
 
 	auto *aa = new Matrix();
 	auto *bb = new Matrix();
@@ -46,7 +49,7 @@ int main() {
 	Matrix *rr = matrixMulByCuda(aa, bb);
 	ends = clock();
 	std::cout << "the answer of cuda normal is: " << cc->matrixCompare(rr) << std::endl;
-	std::cout << "now end the time of cuda normal, the time is: " << ends - start << std::endl << std::endl;
+	std::cout << "now end the time of cuda normal, the time is: " << ends - start << std::endl << std::endl;*/
 	//rr->printMatrix();
 
 	/*start = clock();
