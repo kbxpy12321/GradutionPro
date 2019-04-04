@@ -20,7 +20,7 @@ public slots:
 
 private:
 	Ui::QtMatrixOpenMPClass ui;
-	void doAlgo(QString algoFormer, QString AlgoLatter, int coreNum);
+	void doAlgo(QString algoFormer, QString AlgoLatter, int coreNum, int gpuNum);
 	void initButton();
 	void initTableView();
 	void initCombobox();

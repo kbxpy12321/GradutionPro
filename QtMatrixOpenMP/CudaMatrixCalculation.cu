@@ -93,11 +93,12 @@ Matrix *matrixMul(Matrix *matrixA, Matrix* matrixB) {
 	int calRow, calCol;
 	calCol = CUDAMAXTHREADPERBLOCK;
 	calRow = fullLen / CUDAMAXTHREADPERBLOCK;
-	if (fullLen % calRow != 0) {
-		calRow++;
+	if (calRow < 1) {
+		calRow = 1;
+		calCol = col * row;
 	}
-	if (calRow <= 1) {
-		calCol = col;
+	else if (fullLen % calCol != 0) {
+		calRow++;
 	}
 
 	matrixAT* dev_A;
@@ -204,115 +205,84 @@ extern "C" Matrix *matrixMulByCuda(Matrix *matrixA, Matrix *matrixB) {
 	return nullptr;
 }
 
-__global__ void kernelTestOpenmp(int *dev_a){
-	printf("%d %d\n", dev_a[0], dev_a[1]);
+#define ttN 64000000
+
+__global__ void kernelTestOpenmp(int *dev_b, int tt){
+	for (int i = 0; i < tt; i++) {
+		if (dev_b[i] != i) {
+			printf("no!!!");
+		}
+		printf("yes!!!!");
+	}
 }
 
-extern "C" int testMulCoreSingleGPU() {
-	omp_set_num_threads(4);
-	int *b = new int[8];
+
+
+extern "C" int testMulCoreSingleGPU(int coreNum) {
+	omp_set_num_threads(coreNum);
+	int *b = new int[ttN];
+	for (int i = 0; i < ttN; i++) {
+		b[i] = i;
+	}
 	int *dev_b;
-	/*cudaMalloc((void **)&dev_b, 8 * sizeof(int));
-	cudaMemcpy(dev_b, b, 8 * sizeof(int), cudaMemcpyHostToDevice);*/
+	cudaMalloc((void **)&dev_b, ttN * sizeof(int));
+	cudaMemset(dev_b, 0, ttN * sizeof(int));
+	int partB = ttN / coreNum;
 #pragma omp parallel
 	{
 		int coreNow = omp_get_thread_num();
-		int *a = new int[2];
-		a[0] = coreNow + coreNow * 100 + 0;
-		a[1] = coreNow + coreNow * 100 + 1;
-		int *dev_a;
-		cudaMalloc((void **)&dev_a, 2 * sizeof(int));
-		cudaMemcpy(dev_a, a, 2 * sizeof(int), cudaMemcpyHostToDevice);
-		kernelTestOpenmp << <1, 1 >> > (dev_a);
-		cudaMemcpy(b + coreNow * 2, dev_a, 2 * sizeof(int), cudaMemcpyDeviceToHost);
-//#pragma omp barrier
+		cudaMemcpy(dev_b + partB * coreNow, b + partB * coreNow, partB * sizeof(int), cudaMemcpyHostToDevice);
 	}
-	for (int i = 0; i < 8; i++) {
-		printf("%d\n", b[i]);
-	}
-
+	kernelTestOpenmp << <1, 1 >> > (dev_b, ttN);
 	return 0;
 }
 
-Matrix *matrixOpenMPMulByCuda(Matrix *matrixA, Matrix *matrixB, int coreNum) {
-	int num_gpus = 0;   // number of CUDA GPUs ]
-	cudaGetDeviceCount(&num_gpus);
-	if (num_gpus < 1)
+extern "C" int cudaGetGpus() {
+	int totalGpuNum = 0;
+	cudaGetDeviceCount(&totalGpuNum);
+	return totalGpuNum;
+}
+
+template <typename matrixAT, typename matrixBT, typename matrixCT>
+Matrix *matrixOpenMPMulByCuda(Matrix *matrixA, Matrix *matrixB, int cpuNum, int gpuNum) {
+	if (matrixA == NULL || matrixB == NULL) {
+		return nullptr;
+	}
+
+	int totalGpuNum = 0;
+	cudaGetDeviceCount(&totalGpuNum);
+	int totalCpuNum = omp_get_num_procs();
+	if (totalGpuNum < 1)
 	{
 		printf("no CUDA capable devices were detected\n");
 		return nullptr;
 	}
 
-	unsigned int n = num_gpus * 8192;
-	unsigned int nbytes = n * sizeof(int);
-	int *a = 0;     // pointer to data on the CPU
-	int b = 3;      // value by which the array is incremented
-	a = (int *)malloc(nbytes);
-
-	if (0 == a)
-	{
-		printf("couldn't allocate CPU memory\n");
+	int fullLen = matrixA->getRow() * matrixB->getCol();
+	if (fullLen > CUDAMAXTHREADPERBLOCK * CUDAMAXBLOCK * totalGpuNum) {
 		return nullptr;
 	}
+	int row = matrixA->getRow();
+	int col = matrixB->getCol();
+	int sameSide = matrixA->getCol();
 
-	for (unsigned int i = 0; i < n; i++)
-		a[i] = i;
+	int finalType = MatrixCalculation::matrixTypeDecision(matrixA->getType(), matrixB->getType());
 
+	if (gpuNum > totalGpuNum)
+		gpuNum = totalGpuNum;
+	if (gpuNum > cpuNum)
+		cpuNum = gpuNum;
 
-	////////////////////////////////////////////////////////////////
-	// run as many CPU threads as there are CUDA devices
-	//   each CPU thread controls a different device, processing its
-	//   portion of the data.  It's possible to use more CPU threads
-	//   than there are CUDA devices, in which case several CPU
-	//   threads will be allocating resources and launching kernels
-	//   on the same device.  For example, try omp_set_num_threads(2*num_gpus);
-	//   Recall that all variables declared inside an "omp parallel" scope are
-	//   local to each CPU thread
-	//
-	omp_set_num_threads(num_gpus);  // create as many CPU threads as there are CUDA devices
-	//omp_set_num_threads(2*num_gpus);// create twice as many CPU threads as there are CUDA devices
+	omp_set_num_threads(cpuNum);
+
 #pragma omp parallel
 	{
-		unsigned int cpu_thread_id = omp_get_thread_num();
-		unsigned int num_cpu_threads = omp_get_num_threads();
-
-		// set and check the CUDA device for this CPU thread
+		int rowDevisionPart = row / cpuNum, colDevisionPart = col / gpuNum;
+		int cpuNow = omp_get_thread_num();
 		int gpu_id = -1;
-		checkCudaErrors(cudaSetDevice(cpu_thread_id % num_gpus));   // "% num_gpus" allows more CPU threads than GPU devices
-		checkCudaErrors(cudaGetDevice(&gpu_id));
-		printf("CPU thread %d (of %d) uses CUDA device %d\n", cpu_thread_id, num_cpu_threads, gpu_id);
-
-		int *d_a = 0;   // pointer to memory on the device associated with this CPU thread
-		int *sub_a = a + cpu_thread_id * n / num_cpu_threads;   // pointer to this CPU thread's portion of data
-		unsigned int nbytes_per_kernel = nbytes / num_cpu_threads;
-		dim3 gpu_threads(128);  // 128 threads per block
-		dim3 gpu_blocks(n / (gpu_threads.x * num_cpu_threads));
-
-		checkCudaErrors(cudaMalloc((void **)&d_a, nbytes_per_kernel));
-		checkCudaErrors(cudaMemset(d_a, 0, nbytes_per_kernel));
-		checkCudaErrors(cudaMemcpy(d_a, sub_a, nbytes_per_kernel, cudaMemcpyHostToDevice));
-		kernelAddConstant << <gpu_blocks, gpu_threads >> > (d_a, b);
-
-		checkCudaErrors(cudaMemcpy(sub_a, d_a, nbytes_per_kernel, cudaMemcpyDeviceToHost));
-		checkCudaErrors(cudaFree(d_a));
-
+		cudaSetDevice(cpuNow % gpuNum);
+		cudaGetDevice(&gpu_id);
 	}
-	printf("---------------------------\n");
-
-	if (cudaSuccess != cudaGetLastError())
-		printf("%s\n", cudaGetErrorString(cudaGetLastError()));
-
-
-	////////////////////////////////////////////////////////////////
-	// check the result
-	//
-	//bool bResult = correctResult(a, n, b);
-
-	if (a)
-		free(a); // free CPU memory
-
-	//exit(bResult ? EXIT_SUCCESS : EXIT_FAILURE);
-
 	return nullptr;
 }
 

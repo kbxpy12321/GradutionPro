@@ -8,6 +8,7 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include <fstream>
 
 void Matrix::randomMatrix(int row, int col, int matrixType, int MIN, int MAX) {
 	std::random_device rd;
@@ -25,6 +26,19 @@ void Matrix::randomMatrix(int row, int col, int matrixType, int MIN, int MAX) {
 
 void Matrix::readMatrix() {
 
+}
+
+void Matrix::writeMatrix(std::string fileName) {
+	int row = getRow();
+	int col = getCol();
+	std::ofstream ofile("d:\\VSProgramming\\C++\\QtMatrixOpenMP\\" + fileName);
+	for (int i = 1; i <= row; i++) {
+		for (int j = 1; j <= col; j++) {
+			ofile << getMatrixElement(i, j) << " ";
+		}
+		ofile << std::endl;
+	}
+	ofile << std::endl;
 }
 
 void* Matrix::returnVectorData() {

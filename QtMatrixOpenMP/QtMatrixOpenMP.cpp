@@ -8,14 +8,16 @@
 
 #include <CudaMatrixCalculation.cuh>
 
-#define tableViewCalQueueCol 3
+#define tableViewCalQueueCol 4
 #define tableViewShowRes 3
 
 QStandardItemModel *modelInTableViewCalQueue;
 QStandardItemModel *modelInTableViewShowRes;
 Matrix *matrixA, *matrixB;
+int algoArray = 0;
 
 extern "C" Matrix *matrixMulByCuda(Matrix *matrixA, Matrix *matrixB);
+extern "C" int cudaGetGpus();
 
 void QtMatrixOpenMP::initButton() {
 	connect(ui.pushButton_insertqueque, SIGNAL(clicked()), this, SLOT(clickPushButton_InsertQueque()));
@@ -31,7 +33,8 @@ void QtMatrixOpenMP::initTableView() {
 	modelInTableViewCalQueue->setColumnCount(tableViewCalQueueCol);
 	modelInTableViewCalQueue->setHeaderData(0, Qt::Horizontal, QString::fromLocal8Bit("矩阵划分算法"));
 	modelInTableViewCalQueue->setHeaderData(1, Qt::Horizontal, QString::fromLocal8Bit("矩阵相乘算法"));
-	modelInTableViewCalQueue->setHeaderData(2, Qt::Horizontal, QString::fromLocal8Bit("核心数"));
+	modelInTableViewCalQueue->setHeaderData(2, Qt::Horizontal, QString::fromLocal8Bit("CPU核心数"));
+	modelInTableViewCalQueue->setHeaderData(3, Qt::Horizontal, QString::fromLocal8Bit("GPU数"));
 	ui.tableView_calqueue->setModel(modelInTableViewCalQueue);
 	ui.tableView_calqueue->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	ui.tableView_calqueue->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -52,6 +55,10 @@ void QtMatrixOpenMP::initCombobox() {
 	for (int i = 1; i <= totalCoreNum; i++) {
 		ui.comboBox_corenum->addItem(QString::number(i));
 	}
+	int totalCudaGpus = cudaGetGpus();
+	for (int i = 0; i <= totalCudaGpus; i++) {
+		ui.comboBox_gpunum->addItem(QString::number(i));
+	}
 }
 
 QtMatrixOpenMP::QtMatrixOpenMP(QWidget *parent)
@@ -68,6 +75,7 @@ void QtMatrixOpenMP::clickPushButton_InsertQueque() {
 	itemIntoTableViewCalQueue.append(new QStandardItem(ui.comboBox_algoParallel->currentText()));
 	itemIntoTableViewCalQueue.append(new QStandardItem(ui.comboBox_algoNormal->currentText()));
 	itemIntoTableViewCalQueue.append(new QStandardItem(ui.comboBox_corenum->currentText()));
+	itemIntoTableViewCalQueue.append(new QStandardItem(ui.comboBox_gpunum->currentText()));
 	modelInTableViewCalQueue->appendRow(itemIntoTableViewCalQueue);
 }
 
@@ -102,6 +110,8 @@ void QtMatrixOpenMP::clickPushButton_ConformMake() {
 	std::string messageToAlert;
 
 	if (matrixA != NULL && matrixB != NULL) {
+		matrixA->writeMatrix("matrixA.txt");
+		matrixB->writeMatrix("matrixB.txt");
 		messageToAlert += "matrixA row: " + std::to_string(matrixA->getRow()) + " col: " + std::to_string(matrixA->getCol()) + " type: " + std::to_string(matrixA->getType());
 		messageToAlert += "\nmatrixB row: " + std::to_string(matrixB->getRow()) + " col: " + std::to_string(matrixB->getCol()) + " type: " + std::to_string(matrixB->getType());
 		QMessageBox::about(NULL, "success!",QString::fromStdString(messageToAlert));
@@ -127,10 +137,11 @@ void QtMatrixOpenMP::clickPushButton_StartCalculation() {
 		QString algoFormer = modelInTableViewCalQueue->data(modelInTableViewCalQueue->index(i, 0)).toString();
 		QString algoLatter = modelInTableViewCalQueue->data(modelInTableViewCalQueue->index(i, 1)).toString();
 		int coreNum = modelInTableViewCalQueue->data(modelInTableViewCalQueue->index(i, 2)).toInt();
-		doAlgo(algoFormer, algoLatter, coreNum);
+		int gpuNum = modelInTableViewCalQueue->data(modelInTableViewCalQueue->index(i, 3)).toInt();
+		algoArray = i + 1;
+		doAlgo(algoFormer, algoLatter, coreNum, gpuNum);
 	}
 	//ui.pushButton_clear->setText(QString::number(modelInTableViewCalQueue->rowCount()));
-
 }
 int algoNameToCode(QString algo) {
 	if (algo == QString::fromLocal8Bit("无")) {
@@ -157,30 +168,35 @@ int algoNameToCode(QString algo) {
 	return ERRORCODE;
 }
 
-void QtMatrixOpenMP::doAlgo(QString algoFormer, QString algoLatter, int coreNum) {
+void QtMatrixOpenMP::doAlgo(QString algoFormer, QString algoLatter, int coreNum, int gpuNum) {
 	int algoFormerCode = algoNameToCode(algoFormer);
 	int algoLatterCode = algoNameToCode(algoLatter);
 	Matrix *matrixRes;
 	clock_t start, end;
 	start = clock();
-	if (algoFormerCode == ALGODNS) {
-		matrixRes = MatrixCalculation::algorithmDNS(matrixA, matrixB, coreNum, algoLatterCode);
-	}
-	else if (algoFormerCode == ALGOCANNON) {
-		matrixRes = MatrixCalculation::algorithmCannon(matrixA, matrixB, coreNum, algoLatterCode);
-	}
-	else if (algoFormer == ALGOSTRASSENPARALLEL) {
-		matrixRes = MatrixCalculation::algorithmStrassen(matrixA, matrixB, coreNum, algoLatterCode);
+	if (gpuNum != 0) {
+		matrixRes = matrixMulByCuda(matrixA, matrixB);
 	}
 	else {
-		if (algoLatterCode == ALGOSTRASSEN) {
-			matrixRes = MatrixCalculation::algorithmStrassen(matrixA, matrixB, 0, 0);
+		if (algoFormerCode == ALGODNS) {
+			matrixRes = MatrixCalculation::algorithmDNS(matrixA, matrixB, coreNum, algoLatterCode);
 		}
-		else if (algoLatterCode == NORMALMATRIXMULPARALLEL) {
-			matrixRes = MatrixCalculation::matrixMulParallel(matrixA, matrixB, coreNum);
+		else if (algoFormerCode == ALGOCANNON) {
+			matrixRes = MatrixCalculation::algorithmCannon(matrixA, matrixB, coreNum, algoLatterCode);
+		}
+		else if (algoFormer == ALGOSTRASSENPARALLEL) {
+			matrixRes = MatrixCalculation::algorithmStrassen(matrixA, matrixB, coreNum, algoLatterCode);
 		}
 		else {
-			matrixRes = MatrixCalculation::matrixMul(matrixA, matrixB);
+			if (algoLatterCode == ALGOSTRASSEN) {
+				matrixRes = MatrixCalculation::algorithmStrassen(matrixA, matrixB, 0, 0);
+			}
+			else if (algoLatterCode == NORMALMATRIXMULPARALLEL) {
+				matrixRes = MatrixCalculation::matrixMulParallel(matrixA, matrixB, coreNum);
+			}
+			else {
+				matrixRes = MatrixCalculation::matrixMul(matrixA, matrixB);
+			}
 		}
 	}
 	end = clock();
@@ -189,20 +205,22 @@ void QtMatrixOpenMP::doAlgo(QString algoFormer, QString algoLatter, int coreNum)
 	itemIntoTableViewShowRes.append(new QStandardItem(algoLatter));
 	itemIntoTableViewShowRes.append(new QStandardItem(QString::number(end - start)));
 	modelInTableViewShowRes->appendRow(itemIntoTableViewShowRes);
+	std::string resFileName = "res" + std::to_string(algoArray) + ".txt";
+	matrixRes->writeMatrix(resFileName);
 }
 
 void QtMatrixOpenMP::clickPushButton_ShowCudaRes()
 {
-	clock_t start, end;
-	start = clock();
-	//ui.pushButton_showcudares->setText(QString::number(testCuda::testInCuda()));
-	Matrix *test1 = matrixMulByCuda(matrixA, matrixB);//TODO
+	//clock_t start, end;
+	//start = clock();
+	////ui.pushButton_showcudares->setText(QString::number(testCuda::testInCuda()));
+	//Matrix *test1 = matrixMulByCuda(matrixA, matrixB);//TODO
+	////Matrix *test2 = MatrixCalculation::matrixMul(matrixA, matrixB);
+	//end = clock();
+	//test1->printMatrix();
 	//Matrix *test2 = MatrixCalculation::matrixMul(matrixA, matrixB);
-	end = clock();
-	test1->printMatrix();
-	Matrix *test2 = MatrixCalculation::matrixMul(matrixA, matrixB);
-	int a = test2->matrixCompare(test1);
-	ui.pushButton_showcudares->setText(QString::number(a));
+	//int a = test2->matrixCompare(test1);
+	//ui.pushButton_showcudares->setText(QString::number(a));
 	
 
 	//QList<QStandardItem*> itemIntoTableViewShowRes;

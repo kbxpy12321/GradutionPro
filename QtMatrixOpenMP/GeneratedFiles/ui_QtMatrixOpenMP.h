@@ -40,6 +40,7 @@ public:
     QComboBox *comboBox_algoParallel;
     QComboBox *comboBox_algoNormal;
     QComboBox *comboBox_corenum;
+    QComboBox *comboBox_gpunum;
     QHBoxLayout *horizontalLayout_usetableview;
     QPushButton *pushButton_insertqueque;
     QPushButton *pushButton_deleteque;
@@ -49,6 +50,7 @@ public:
     QLabel *label_name_algoformer;
     QLabel *label_name_algolatter;
     QLabel *label_name_corenum;
+    QLabel *label_name_gpunum;
     QWidget *gridLayoutWidget;
     QGridLayout *gridLayout_rescal;
     QHBoxLayout *horizontalLayout_resbygraph;
@@ -141,6 +143,11 @@ public:
 
         horizontalLayout_algochoose->addWidget(comboBox_corenum);
 
+        comboBox_gpunum = new QComboBox(gridLayoutWidget_2);
+        comboBox_gpunum->setObjectName(QString::fromUtf8("comboBox_gpunum"));
+
+        horizontalLayout_algochoose->addWidget(comboBox_gpunum);
+
 
         gridLayout_algochoose->addLayout(horizontalLayout_algochoose, 1, 1, 1, 1);
 
@@ -187,6 +194,11 @@ public:
         label_name_corenum->setObjectName(QString::fromUtf8("label_name_corenum"));
 
         horizontalLayout_name_algochoose->addWidget(label_name_corenum);
+
+        label_name_gpunum = new QLabel(gridLayoutWidget_2);
+        label_name_gpunum->setObjectName(QString::fromUtf8("label_name_gpunum"));
+
+        horizontalLayout_name_algochoose->addWidget(label_name_gpunum);
 
 
         gridLayout_algochoose->addLayout(horizontalLayout_name_algochoose, 0, 1, 1, 1);
@@ -441,11 +453,12 @@ public:
         pushButton_deleteque->setText(QApplication::translate("QtMatrixOpenMPClass", "\344\273\216\350\256\241\347\256\227\351\230\237\345\210\227\345\210\240\351\231\244", nullptr));
         pushButton_startcal->setText(QApplication::translate("QtMatrixOpenMPClass", "\345\274\200\345\247\213\350\256\241\347\256\227", nullptr));
         pushButton_clear->setText(QApplication::translate("QtMatrixOpenMPClass", "\345\205\250\351\203\250\346\270\205\347\251\272", nullptr));
-        label_name_algoformer->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265\345\210\222\345\210\206\347\256\227\346\263\225\351\200\211\346\213\251", nullptr));
-        label_name_algolatter->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265\347\233\270\344\271\230\347\256\227\346\263\225\351\200\211\346\213\251", nullptr));
+        label_name_algoformer->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265\345\210\222\345\210\206\347\256\227\346\263\225\351\200\211\346\213\251     ", nullptr));
+        label_name_algolatter->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\237\251\351\230\265\347\233\270\344\271\230\347\256\227\346\263\225\351\200\211\346\213\251    ", nullptr));
         label_name_corenum->setText(QApplication::translate("QtMatrixOpenMPClass", "cpu\346\240\270\345\277\203\346\225\260", nullptr));
+        label_name_gpunum->setText(QApplication::translate("QtMatrixOpenMPClass", "gpu\346\225\260", nullptr));
         pushButton_coutdata->setText(QApplication::translate("QtMatrixOpenMPClass", "\345\257\274\345\207\272\346\225\260\346\215\256", nullptr));
-        pushButton_showcudares->setText(QApplication::translate("QtMatrixOpenMPClass", "CudaMul", nullptr));
+        pushButton_showcudares->setText(QApplication::translate("QtMatrixOpenMPClass", "\350\277\255\344\273\243", nullptr));
         label_name_matrixmaker->setText(QApplication::translate("QtMatrixOpenMPClass", "\351\232\217\346\234\272\347\237\251\351\230\265\347\224\237\346\210\220\345\231\250", nullptr));
         label_name_makematrix->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\224\237\346\210\220\347\237\251\351\230\265", nullptr));
         pushButton_confirmmake->setText(QApplication::translate("QtMatrixOpenMPClass", "\347\241\256\350\256\244\347\224\237\346\210\220", nullptr));

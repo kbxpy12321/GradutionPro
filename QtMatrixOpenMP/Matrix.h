@@ -26,6 +26,7 @@ public:
 	Matrix(int row, int col, int type);
 	Matrix *generateMatrixParts(int leftTopX, int leftTopY, int rightDownX, int rightDownY);
 	void readMatrix();
+	void writeMatrix(std::string fileName);
 	void randomMatrix(int row, int col, int matrixType, int MIN, int MAX);
 	void printMatrix();
 	void initVectorSpace();

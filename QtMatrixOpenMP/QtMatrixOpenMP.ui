@@ -79,6 +79,9 @@
        <item>
         <widget class="QComboBox" name="comboBox_corenum"/>
        </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_gpunum"/>
+       </item>
       </layout>
      </item>
      <item row="3" column="1">
@@ -118,14 +121,14 @@
        <item>
         <widget class="QLabel" name="label_name_algoformer">
          <property name="text">
-          <string>矩阵划分算法选择</string>
+          <string>矩阵划分算法选择     </string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="label_name_algolatter">
          <property name="text">
-          <string>矩阵相乘算法选择</string>
+          <string>矩阵相乘算法选择    </string>
          </property>
         </widget>
        </item>
@@ -133,6 +136,13 @@
         <widget class="QLabel" name="label_name_corenum">
          <property name="text">
           <string>cpu核心数</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_name_gpunum">
+         <property name="text">
+          <string>gpu数</string>
          </property>
         </widget>
        </item>
@@ -162,7 +172,7 @@
        <item>
         <widget class="QPushButton" name="pushButton_showcudares">
          <property name="text">
-          <string>CudaMul</string>
+          <string>迭代</string>
          </property>
         </widget>
        </item>
